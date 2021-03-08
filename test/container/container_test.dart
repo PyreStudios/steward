@@ -12,6 +12,11 @@ void main() {
       var key = container.make('key');
       expect(key, 'ABC123');
     });
+
+    test('should throw an exception when an unbound binding is made', () {
+      var container = Container();
+      expect(() => container.make('key'), throwsNoSuchMethodError);
+    });
   });
 }
 
