@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:drengr/container/container.dart';
+import 'package:path_to_regexp/path_to_regexp.dart';
 
 enum HttpVerb {
   Connect,
@@ -61,6 +64,31 @@ class Router {
 
   void trace(String path, void Function() callback) {
     bindings.add(Binding(verb: HttpVerb.Trace, path: path, callback: callback));
+  }
+
+  Future serveHTTP() async {
+    var server = await HttpServer.bind(
+      InternetAddress.loopbackIPv4,
+      4040,
+    );
+
+    await for (HttpRequest request in server) {
+      for (var i = 0; i < bindings.length; i++) {
+        var params = <String>[];
+        var regex = pathToRegExp(bindings[i].path, parameters: params);
+        var hasMatch = regex.hasMatch(request.uri.path);
+        
+        if (hasMatch) {
+          var match = regex.matchAsPrefix(request.uri.path);
+          var pathParams = extract(params, match);
+          
+        }
+        
+        
+      }
+      request.response.write('Hello World');
+      await request.response.close();
+    }
   }
 
 
