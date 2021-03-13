@@ -4,7 +4,7 @@ import 'package:yaml/yaml.dart';
 class ConfigReader {
   File file;
   // @todo: Spooky dynamic
-  dynamic parsed;
+  YamlMap parsed;
 
   ConfigReader({this.file});
 
