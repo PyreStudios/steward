@@ -1,19 +1,24 @@
+import 'dart:io';
+
+import 'package:drengr/router/router.dart';
+import 'package:drengr/container/container.dart';
+
+class AppConfigurationException implements Exception {}
+
 class App {
 
   Router router;
+  Container container;
 
-  App({this.router});
+  App({this.router, this.container});
 
   Future start() async {
-    var server = await HttpServer.bind(
-      InternetAddress.loopbackIPv4,
-      4040,
-    );
+    router.container ??= container;
 
-    await for (HttpRequest request in server) {
-      // router here though.
-      request.response.write('Hello, world!');
-      await request.response.close();
+    if (router != null) {
+      return await router.serveHTTP();
+    } else {
+      throw AppConfigurationException();
     }
   }
 }
