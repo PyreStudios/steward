@@ -1,0 +1,3 @@
+app:
+  name: Sample App
+  port: 4040 # this isnt used yet

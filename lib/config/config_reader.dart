@@ -1,15 +1,18 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:yaml/yaml.dart';
 
 class ConfigReader {
   File file;
-  // @todo: Spooky dynamic
-  YamlMap parsed;
 
-  ConfigReader({this.file});
+  Map<String, Object> parsed = {};
+
+  ConfigReader({required this.file});
 
   void read() {
     var data = file.readAsStringSync();
-    parsed = loadYaml(data);
+    YamlMap yamlMap = loadYaml(data);
+    // hacky way to go from yaml map to normal map
+    parsed = jsonDecode(jsonEncode(yamlMap));
   }
 }

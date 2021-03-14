@@ -85,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.2.1"
+  flat:
+    dependency: "direct main"
+    description:
+      name: flat
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   glob:
     dependency: transitive
     description:

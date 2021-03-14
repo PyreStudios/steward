@@ -1,8 +1,16 @@
 import 'dart:io';
+import 'package:drengr/container/container.dart';
 
 class Request {
   HttpRequest request;
+  Container container = Container();
   Map<String, dynamic> pathParams;
 
-  Request({this.request, this.pathParams});
+  Request({required this.request, this.pathParams = const {}});
+
+  void setContainer(Container? container) {
+    if (container != null) {
+      this.container = container;
+    }
+  }
 }

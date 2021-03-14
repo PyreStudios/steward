@@ -24,14 +24,14 @@ class Binding {
   String path;
   RequestCallback callback;
 
-  Binding({this.verb, this.path, this.callback});
+  Binding({required this.verb, required this.path, required this.callback});
 }
 
 
 
 class Router {
 
-  Container container;
+  Container? container;
   List<Binding> bindings = [];
 
   void setDIContainer(Container container) {
@@ -71,10 +71,13 @@ class Router {
   }
 
   Future serveHTTP() async {
+    var port = container?.make('@config.app.port') ?? 4040;
     var server = await HttpServer.bind(
       InternetAddress.loopbackIPv4,
-      4040,
+      port,
     );
+
+    print('Bound server to port ${port}');
 
     await for (HttpRequest request in server) {
       var hasMatch = false;
@@ -84,11 +87,14 @@ class Router {
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {
-          var match = regex.matchAsPrefix(request.uri.path);
-          var pathParams = extract(params, match);
-          var response = bindings[i].callback(Request(request: request, pathParams: pathParams));
-          _renderResponse(request, response);
-          break;
+            var match = regex.matchAsPrefix(request.uri.path);
+            if (match != null) {
+            var pathParams = extract(params, match);
+            var req = Request(request: request, pathParams: pathParams)..setContainer(container);
+            var response = bindings[i].callback(req);
+            _renderResponse(request, response);
+            break;
+          }
         }
       }
 
