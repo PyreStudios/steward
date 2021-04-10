@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:yaml/yaml.dart';
 
+/// Parses Yaml config files and converts them into Map objects.
 class ConfigReader {
   File file;
 

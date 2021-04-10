@@ -24,10 +24,14 @@ class App {
     return await router.serveHTTP();
   }
 
+  /// Create a container for us if one is not in scope
   void initializeContainer () {
     container ??= Container();
   }
 
+  /// Loads and parses the config file, then flattens the config map
+  /// and ultimately preprends "@config." to the key before adding that
+  /// config item to the DI container.
   void loadConfigIntoContainer() {
     var configFile = File('config.yml');
     var configReader = ConfigReader(file: configFile)..read();

@@ -10,6 +10,7 @@ dependencies:
 #  path: ^1.7.0
   path_to_regexp: ^0.4.0
   flat: ^0.3.0
+  mustache_template: ^2.0.0
 
 dev_dependencies:
   pedantic: ^1.9.0
