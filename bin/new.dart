@@ -41,17 +41,17 @@ import 'package:drengr/router/response.dart';
 
 Future main() async {
   var router = Router();
-  router.get('/hello', (Request request) {
+  router.get('/hello', handler: (Request request) {
     return Response.Ok('Hello World!');
   });
 
-  router.get('/config', (Request request) {
+  router.get('/config', handler: (Request request) {
     print(request.container);
     print(request.container.make('@config'));
     return Response.Ok(request.container.make('@config'));
   });
 
-  router.get('/:name', (Request request) {
+  router.get('/:name', handler: (Request request) {
     return Response.Ok(request.pathParams['name']);
   });
 

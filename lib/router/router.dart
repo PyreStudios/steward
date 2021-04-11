@@ -39,33 +39,33 @@ class Router {
     this.container = container;
   }
 
-  void connect(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Connect, callback: callback, controller: controller, method: method);
+  void connect(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Connect, handler: handler, controller: controller, method: method);
 
-  void delete(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Delete, callback: callback, controller: controller, method: method);
+  void delete(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Delete, handler: handler, controller: controller, method: method);
 
-  void get(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Get, callback: callback, controller: controller, method: method);
+  void get(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Get, handler: handler, controller: controller, method: method);
 
-  void options(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Options, callback: callback, controller: controller, method: method);
+  void options(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Options, handler: handler, controller: controller, method: method);
 
-  void patch(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Patch, callback: callback, controller: controller, method: method);
+  void patch(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Patch, handler: handler, controller: controller, method: method);
 
-  void post(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Post, callback: callback, controller: controller, method: method);
+  void post(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Post, handler: handler, controller: controller, method: method);
 
-  void put(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Put, callback: callback, controller: controller, method: method);
+  void put(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Put, handler: handler, controller: controller, method: method);
 
-  void trace(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Trace, callback: callback, controller: controller, method: method);
+  void trace(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Trace, handler: handler, controller: controller, method: method);
 
-  void _addBinding(String path, HttpVerb verb, {RequestCallback? callback, Controller? controller, String? method}) {
-    if (callback != null) {
-      bindings.add(Binding(verb: HttpVerb.Trace, path: path, callback: callback));
+  void _addBinding(String path, HttpVerb verb, {RequestCallback? handler, Controller? controller, String? method}) {
+    if (handler != null) {
+      bindings.add(Binding(verb: HttpVerb.Trace, path: path, callback: handler));
     } else if (controller != null && method != null) {
       bindings.add(ControllerRouteBinding(verb: verb, path: path, controller: controller, methodName: method));
     } else {
@@ -112,6 +112,4 @@ class Router {
   void _renderResponse(HttpRequest request, Response response) {
     request.response.write(response.body);
   }
-
-
 }
