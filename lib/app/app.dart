@@ -41,4 +41,18 @@ class App {
       container?.bind('@config.'+element.key, (_) => element.value);
     });
   }
+
+  void loadViewsIntoContainer() {
+    var files = Directory('./views')
+      .listSync(recursive: true, followLinks: true)
+      .where((entity) => entity is File)
+      .where((file) => file.path.endsWith('.mustache'))
+      .map((file) => {
+        'path': file.path,
+        'contents': (file as File).readAsStringSync()
+      });
+    files.forEach((file) {
+      container?.bind('@view.${file["path"]}', (_) => file['contents']);
+    });
+  }
 }

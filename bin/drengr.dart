@@ -14,7 +14,7 @@ void main(List<String> arguments) {
       newCmd.newApp(arguments);
       break;
     case 'create':
-      createCmd.create(arguments);
+      /*createCmd.create(arguments);*/
       break;
     default:
       help.showHelp();
