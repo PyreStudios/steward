@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:drengr/container/container.dart';
+import 'package:drengr/controllers/controller.dart';
+import 'package:drengr/controllers/controller_route_binding.dart';
 import 'package:drengr/router/response.dart';
 import 'package:drengr/router/request.dart';
 import 'package:path_to_regexp/path_to_regexp.dart';
@@ -37,36 +39,38 @@ class Router {
     this.container = container;
   }
 
-  void connect(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Connect, path: path, callback: callback));
-  }
+  void connect(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Connect, callback: callback, controller: controller, method: method);
 
-  void delete(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Delete, path: path, callback: callback));
-  }
+  void delete(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Delete, callback: callback, controller: controller, method: method);
 
-  void get(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Get, path: path, callback: callback));
-  }
+  void get(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Get, callback: callback, controller: controller, method: method);
 
-  void options(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Options, path: path, callback: callback));
-  }
+  void options(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Options, callback: callback, controller: controller, method: method);
 
-  void patch(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Patch, path: path, callback: callback));
-  }
+  void patch(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Patch, callback: callback, controller: controller, method: method);
 
-  void post(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Post, path: path, callback: callback));
-  }
+  void post(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Post, callback: callback, controller: controller, method: method);
 
-  void put(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Put, path: path, callback: callback));
-  }
+  void put(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Put, callback: callback, controller: controller, method: method);
 
-  void trace(String path, RequestCallback callback) {
-    bindings.add(Binding(verb: HttpVerb.Trace, path: path, callback: callback));
+  void trace(String path, {RequestCallback? callback, Controller? controller, String? method}) => 
+    _addBinding(path, HttpVerb.Trace, callback: callback, controller: controller, method: method);
+
+  void _addBinding(String path, HttpVerb verb, {RequestCallback? callback, Controller? controller, String? method}) {
+    if (callback != null) {
+      bindings.add(Binding(verb: HttpVerb.Trace, path: path, callback: callback));
+    } else if (controller != null && method != null) {
+      bindings.add(ControllerRouteBinding(verb: verb, path: path, controller: controller, methodName: method));
+    } else {
+      throw Exception('Unable to add binding');
+    }
   }
 
   Future serveHTTP() async {
