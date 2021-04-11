@@ -67,6 +67,10 @@ class Router {
     if (handler != null) {
       bindings.add(Binding(verb: HttpVerb.Trace, path: path, callback: handler));
     } else if (controller != null && method != null) {
+      var container = this.container;
+      if (container != null) {
+        controller.setContainer(container);
+      }
       bindings.add(ControllerRouteBinding(verb: verb, path: path, controller: controller, methodName: method));
     } else {
       throw Exception('Unable to add binding');

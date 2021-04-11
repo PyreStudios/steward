@@ -6,6 +6,6 @@ import 'package:drengr/controllers/controller.dart';
 
 class ControllerRouteBinding extends Binding {
   ControllerRouteBinding({required HttpVerb verb, required String path, required Controller controller, required String methodName}): super(verb: verb, path: path, callback: (Request request) {
-    return reflect(controller).invoke(Symbol(methodName), [request]) as Response;
+    return reflect(controller).invoke(Symbol(methodName), [request]).reflectee as Response;
   });
 }
