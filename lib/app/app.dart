@@ -45,11 +45,11 @@ class App {
   void loadViewsIntoContainer() {
     var files = Directory('./views')
       .listSync(recursive: true, followLinks: true)
-      .where((entity) => entity is File)
+      .whereType<File>()
       .where((file) => file.path.endsWith('.mustache'))
       .map((file) => {
         'path': file.path,
-        'contents': (file as File).readAsStringSync()
+        'contents': file.readAsStringSync()
       });
     files.forEach((file) {
       container?.bind('@view.${file["path"]}', (_) => file['contents']);
