@@ -7,28 +7,69 @@ app:
 ''';
 
 var viewTemplate = '''<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-  </head>
-  <body>
-  <section class="section">
-    <div class="container">
-      <h1 class="title">
-        Hello World
-      </h1>
-      <p class="subtitle">
-        My first website with <strong>Bulma</strong>!
-      </p>
-      <p>
-        Learn about <a href="./my-favorite-sandwich.html">my favorite sandwich</a>
-      </p>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    @media(max-width: 500px) {
+      .reverse-columns {
+        flex-direction: column-reverse;
+        display: flex;
+      }
+    }
+
+    .titled {
+      font-family: 'Merriweather', serif !important;
+      font-size: 58px !important;
+      font-weight: 400 !important;
+      line-height: 64px !important;
+    }
+
+    .subtitled {
+      font-family: 'Merriweather', serif !important;
+      font-size: 22px !important;
+      font-weight: 400 !important;
+      line-height: 36px !important;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero is-white is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <div class="columns is-vcentered reverse-columns">
+          <div class="column
+          is-10-mobile is-offset-1-mobile
+          is-10-tablet is-offset-1-tablet
+          is-5-desktop is-offset-1-desktop
+          is-5-widescreen is-offset-1-widescreen
+          is-5-fullhd is-offset-1-fullhd">
+            <h1 class="title titled is-1 mb-6">
+              Congrats on starting your first Drengr app.
+            </h1>
+            <h2 class=" subtitled subtitle has-text-grey is-4 has-text-weight-normal is-family-sans-serif">
+              Don't be afraid to check out the documentation for more information.
+            </h2>
+            <div class="buttons">
+              <button class="button is-black">Documentation</button>
+              <button class="button">Github</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
-  </body>
+</body>
+
 </html>
 ''';
 
@@ -38,9 +79,11 @@ import 'package:drengr/container/container.dart';
 import 'package:drengr/router/router.dart';
 import 'package:drengr/router/request.dart';
 import 'package:drengr/router/response.dart';
+import 'package:{{{name}}}/controllers/sample_controller.dart';
 
 Future main() async {
   var router = Router();
+  router.get('/', controller: SimpleController(), method:'home');
   router.get('/hello', handler: (Request request) {
     return Response.Ok('Hello World!');
   });
@@ -65,6 +108,13 @@ Future main() async {
 }
 ''';
 
+var controllerTemplate = '''class SimpleController extends Controller {
+  Response home(Request request) {
+    return view('main');
+  }
+}
+''';
+
 void newApp(List<String> arguments) {
   if (arguments.length < 2) {
     print('Help coming soon.');
@@ -72,8 +122,7 @@ void newApp(List<String> arguments) {
 
   var name = arguments[1];
 
-  var directory = Directory('$name');
-  directory.createSync();
+  Process.runSync('dart', ['create', name, '--template', 'console-simple']);
 
   var config = File('./$name/config.yml');
   config.writeAsStringSync(configTemplate);
@@ -85,9 +134,14 @@ void newApp(List<String> arguments) {
   assetsDir.createSync();
 
   // write initial files
-  File('$name/app.dart').writeAsStringSync(appTemplate);
+  File('$name/app.dart').writeAsStringSync(appTemplate.replaceAll('{{{name}}}', name));
+  File('$name/controllers/sample_controller.dart').writeAsStringSync(controllerTemplate);
   File('$name/views/main.mustache').writeAsStringSync(viewTemplate);
 
+  Directory.current = Directory('./$name');
+
+  Process.runSync('dart', ['pub', 'add', 'drengr']);
+
   print(
-      'Generated new Drengr project in directory: ${directory.absolute.path}');
+      'Generated new Drengr project in directory: $name');
 }

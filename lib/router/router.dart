@@ -21,19 +21,31 @@ enum HttpVerb {
 
 typedef RequestCallback = Response Function(Request request);
 
-class Binding {
-  HttpVerb verb;
-  String path;
+abstract class RouteBinding {
+  late HttpVerb verb;
+  late String path;
+
+  RouteBinding({required this.verb, required this.path});
+
+  Response process(Request request);
+}
+
+class FunctionBinding extends RouteBinding {
   RequestCallback callback;
 
-  Binding({required this.verb, required this.path, required this.callback});
+  FunctionBinding({required verb, required path, required this.callback}): super(verb: verb, path: path);
+
+  @override
+  Response process(Request request) {
+    return callback(request);
+  }
 }
 
 
 class Router {
 
   Container? container;
-  List<Binding> bindings = [];
+  List<RouteBinding> bindings = [];
 
   void setDIContainer(Container container) {
     this.container = container;
@@ -65,12 +77,8 @@ class Router {
 
   void _addBinding(String path, HttpVerb verb, {RequestCallback? handler, Controller? controller, String? method}) {
     if (handler != null) {
-      bindings.add(Binding(verb: HttpVerb.Trace, path: path, callback: handler));
+      bindings.add(FunctionBinding(verb: HttpVerb.Trace, path: path, callback: handler));
     } else if (controller != null && method != null) {
-      var container = this.container;
-      if (container != null) {
-        controller.setContainer(container);
-      }
       bindings.add(ControllerRouteBinding(verb: verb, path: path, controller: controller, methodName: method));
     } else {
       throw Exception('Unable to add binding');
@@ -96,11 +104,11 @@ class Router {
         if (hasMatch) {
             var match = regex.matchAsPrefix(request.uri.path);
             if (match != null) {
-            var pathParams = extract(params, match);
-            var req = Request(request: request, pathParams: pathParams)..setContainer(container);
-            var response = bindings[i].callback(req);
-            _renderResponse(request, response);
-            break;
+              var pathParams = extract(params, match);
+              var req = Request(request: request, pathParams: pathParams)..setContainer(container);
+              var response = bindings[i].process(req);
+              _renderResponse(request, response);
+              break;
           }
         }
       }
@@ -114,6 +122,8 @@ class Router {
   }
 
   void _renderResponse(HttpRequest request, Response response) {
+    request.response.headers.contentType = response.headers.contentType;
+    request.response.headers.date = response.headers.date;
     request.response.write(response.body);
   }
 }

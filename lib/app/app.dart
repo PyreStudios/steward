@@ -18,6 +18,7 @@ class App {
   Future start() async {
     initializeContainer();
     loadConfigIntoContainer();
+    loadViewsIntoContainer();
 
     router.container ??= container;
 
@@ -43,16 +44,21 @@ class App {
   }
 
   void loadViewsIntoContainer() {
-    var files = Directory('./views')
-      .listSync(recursive: true, followLinks: true)
-      .whereType<File>()
-      .where((file) => file.path.endsWith('.mustache'))
-      .map((file) => {
-        'path': file.path,
-        'contents': file.readAsStringSync()
+    try {
+      var files = Directory('./views')
+        .listSync(recursive: true, followLinks: true)
+        .whereType<File>()
+        .where((file) => file.path.endsWith('.mustache'))
+        .map((file) => {
+          'path': file.path,
+          'contents': file.readAsStringSync()
+        });
+      files.forEach((file) {
+        var key = file['path']?.replaceAll('/', '.').replaceFirst('..views.', '').replaceFirst('.mustache', '');
+        container?.bind('@views.$key', (_) => file['contents']);
       });
-    files.forEach((file) {
-      container?.bind('@view.${file["path"]}', (_) => file['contents']);
-    });
+    } catch (e) {
+      print('Failed to load views. Please ensure that there is a `views` subfolder in your application.');
+    }
   }
 }

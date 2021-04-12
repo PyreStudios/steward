@@ -1,34 +1,41 @@
 import 'dart:io';
 
+class Headers {
+  ContentType contentType = ContentType.json;
+  DateTime? date = DateTime.now();
+
+  Headers();
+}
+
 class Response {
   int statusCode;
-  Map<String, dynamic>? headers;
+  Headers headers = Headers();
   // this could be anything!
   dynamic body;
 
-  Response(this.statusCode, {this.headers, this.body});
+  Response(this.statusCode, {this.body});
 
-  Response.Ok(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.ok, headers: headers, body: body);
+  Response.Ok(dynamic body) :
+    this(HttpStatus.ok, body: body);
 
-  Response.Created(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.created, headers: headers, body: body);
+  Response.Created(dynamic body) :
+    this(HttpStatus.created, body: body);
 
-  Response.BadRequest(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.badRequest, headers: headers, body: body);
+  Response.BadRequest(dynamic body) :
+    this(HttpStatus.badRequest, body: body);
 
-  Response.Unauthorized(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.unauthorized, headers: headers, body: body);
+  Response.Unauthorized(dynamic body) :
+    this(HttpStatus.unauthorized, body: body);
 
-  Response.Forbidden(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.forbidden, headers: headers, body: body);
+  Response.Forbidden(dynamic body) :
+    this(HttpStatus.forbidden, body: body);
 
-  Response.NotFound(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.notFound, headers: headers, body: body);
+  Response.NotFound(dynamic body) :
+    this(HttpStatus.notFound, body: body);
 
-  Response.InternalServerError(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.internalServerError, headers: headers, body: body);
+  Response.InternalServerError(dynamic body) :
+    this(HttpStatus.internalServerError, body: body);
 
-  Response.Boom(dynamic body, {Map<String, dynamic>? headers}) :
-    this(HttpStatus.internalServerError, headers: headers, body: body);
+  Response.Boom(dynamic body) :
+    this(HttpStatus.internalServerError, body: body);
 }
