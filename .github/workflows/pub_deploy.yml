@@ -1,0 +1,25 @@
+# Deploy to pub.dev
+
+name: Pub Deploy
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    tags:
+      - v**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Run a one-line script
+        uses: k-paxian/dart-package-publisher@v1.2
+        with:
+          accessToken: ${{ secrets.PUB_ACCESS_TOKEN }}
+          refreshToken: ${{ secrets.PUB_REFRESH_TOKEN}}
+
