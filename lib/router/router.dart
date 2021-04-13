@@ -30,10 +30,10 @@ abstract class RouteBinding {
   Response process(Request request);
 }
 
-class FunctionBinding extends RouteBinding {
+class _FunctionBinding extends RouteBinding {
   RequestCallback callback;
 
-  FunctionBinding({required verb, required path, required this.callback}): super(verb: verb, path: path);
+  _FunctionBinding({required verb, required path, required this.callback}): super(verb: verb, path: path);
 
   @override
   Response process(Request request) {
@@ -46,6 +46,7 @@ class Router {
 
   Container? container;
   List<RouteBinding> bindings = [];
+  HttpServer? server;
 
   void setDIContainer(Container container) {
     this.container = container;
@@ -77,7 +78,7 @@ class Router {
 
   void _addBinding(String path, HttpVerb verb, {RequestCallback? handler, Controller? controller, String? method}) {
     if (handler != null) {
-      bindings.add(FunctionBinding(verb: HttpVerb.Trace, path: path, callback: handler));
+      bindings.add(_FunctionBinding(verb: HttpVerb.Trace, path: path, callback: handler));
     } else if (controller != null && method != null) {
       bindings.add(ControllerRouteBinding(verb: verb, path: path, controller: controller, methodName: method));
     } else {
@@ -85,16 +86,22 @@ class Router {
     }
   }
 
+  /// forcibly shut down the server
+  /// userful if the server is running in the background
+  Future terminate() {
+    return server!.close(force: true);
+  }
+
   Future serveHTTP() async {
     var port = container?.make('@config.app.port') ?? 4040;
-    var server = await HttpServer.bind(
+    server = await HttpServer.bind(
       InternetAddress.loopbackIPv4,
       port,
     );
 
     print('Bound server to port ${port}');
 
-    await for (HttpRequest request in server) {
+    await for (HttpRequest request in server!) {
       var hasMatch = false;
       for (var i = 0; i < bindings.length; i++) {
         var params = <String>[];
