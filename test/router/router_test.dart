@@ -11,9 +11,6 @@ void main() {
 
   setUp(() async {
     router = Router();
-    router?.get('/', handler: (_) {
-      return Response.Ok('Success');
-    });
     router?.serveHTTP();
   });
 
@@ -22,9 +19,24 @@ void main() {
     router = null;
   });
 
-  test('Router responds appropriately ot simple GET requests', () async {
+  test('Router responds appropriately to simple GET requests', () async {
+    router?.get('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
     final client = HttpClient();
     final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first, equals('Success'));
+  });
+
+  test('Router responds appropriately to simple POST requests', () async {
+    router?.post('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
+    final client = HttpClient();
+    final request = await client.post(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
