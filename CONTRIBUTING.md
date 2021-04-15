@@ -9,12 +9,39 @@ By participating, you are expected to uphold this code. Please report unacceptab
 
 ## What do I need to know?
 
+Drengr ships as two major modules, the binary module (bin) and the library module (lib).
+The binary gets built as an executable and is used to provide a CLI for working with (and generating) Drengr projects.
+
+The library module contains all of the code that is used during runtime for applications built ontop of Drengr (controllers, router, etc).
+
 # How can I contribute?
 
 ## Bug Reports
 
-## Suggesting Enhancemennts
+Does something seem off? Are you seeing crashes that point to our code? Let us know! Bug reports help us isolate issues and ensure that they get fixed in future versions of Drengr. Please open an issue and provide as much relevant information as you can (including Operating System, processor architecture, and similar).
+
+## Suggesting Enhancements
+
+Wouldn't it be cool of Drengr had an ".explode()" call that wiped your filesystem? Yeah, I didn't think so either, but that doesnt mean we don't want to read your suggestions for the library! Feel free to open an issue to talk through new features or ideas for Drengr. Please __do not__ create new Pull Requests for features that havn't been discussed yet. We don't want you to spend your time implementing something that goes against what we believe Drengr should be, especially if it won't get accepted.
 
 ## Contributing to discussions on issues and pull requests
 
 TODO: Fill these out :)
+
+## Building and Testing Locally
+
+To build Drengr and the Drengr CLI, you'll need to make sure you've [installed Dart on your machine](https://dart.dev/get-dart).
+
+To build the binary, from the project directory, you can run:
+
+```
+dart compile exe ./bin/drengr.dart
+```
+
+This will create a new executable in the `./bin` directory. You can then access this binary using `./bin/drengr.exe {your_commands_here}`. For example, to start a new Drengr project named `testeroni` you could run `./bin/drengr.exe new testeroni`.
+
+### Running Tests
+
+Drengr uses tests to cover some (eventually most) of it's application behavior. Tests are vitally important as they help instill confidence in both the team of contributors as well as the community. It's important to write new tests as we add new functionality and existing tests must pass before changes can be merged in to our main branch.
+
+Tests live in the `tests` folder and can be ran via `dart test` in the root directory.
