@@ -139,6 +139,13 @@ class Router {
       }
 
       if (!hasMatch) {
+        var req = Request(request: request)..setContainer(container);
+        // process router level middleware
+        if (middleware.isNotEmpty) {
+          middleware.forEach((element) {
+            element(req);
+          });
+        }
         request.response.statusCode = 404;
       }
 

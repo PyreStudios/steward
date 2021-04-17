@@ -66,14 +66,11 @@ void main() {
     expect(called, true); 
   });
 
-  test('Router should trigger router-specific middleware on all matched requests', () async {
+  test('Router should trigger router-specific middleware on all incoming requests', () async {
     var called = false;
     router?.middleware = [(Request) {
       called = true;
     }];
-    router?.get('/', handler: (_) {
-      return Response.Ok('Success');
-    });
 
     final client = HttpClient();
     final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');

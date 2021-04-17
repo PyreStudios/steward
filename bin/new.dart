@@ -108,7 +108,10 @@ Future main() async {
 }
 ''';
 
-var controllerTemplate = '''class SimpleController extends Controller {
+var controllerTemplate = '''import 'package:drengr/controllers/controller.dart';
+import 'package:drengr/router/request.dart';
+import 'package:drengr/router/response.dart';
+class SimpleController extends Controller {
   Response home(Request request) {
     return view('main');
   }
