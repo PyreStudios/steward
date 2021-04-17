@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drengr/container/container.dart';
 import 'package:drengr/controllers/controller.dart';
 import 'package:drengr/controllers/controller_route_binding.dart';
+import 'package:drengr/middleware/middleware.dart';
 import 'package:drengr/router/response.dart';
 import 'package:drengr/router/request.dart';
 import 'package:path_to_regexp/path_to_regexp.dart';
@@ -24,8 +25,9 @@ typedef RequestCallback = Response Function(Request request);
 abstract class RouteBinding {
   late HttpVerb verb;
   late String path;
+  List<MiddlewareFunc> middleware = [];
 
-  RouteBinding({required this.verb, required this.path});
+  RouteBinding({required this.verb, required this.path, this.middleware = const []});
 
   Response process(Request request);
 }
@@ -33,7 +35,7 @@ abstract class RouteBinding {
 class _FunctionBinding extends RouteBinding {
   RequestCallback callback;
 
-  _FunctionBinding({required verb, required path, required this.callback}): super(verb: verb, path: path);
+  _FunctionBinding({required verb, required path, required this.callback, middleware = const []}): super(verb: verb, path: path, middleware: middleware);
 
   @override
   Response process(Request request) {
@@ -46,41 +48,42 @@ class Router {
 
   Container? container;
   List<RouteBinding> bindings = [];
+  List<MiddlewareFunc> middleware = [];
   HttpServer? server;
 
   void setDIContainer(Container container) {
     this.container = container;
   }
 
-  void connect(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Connect, handler: handler, controller: controller, method: method);
+  void connect(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const []}) => 
+    _addBinding(path, HttpVerb.Connect, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void delete(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Delete, handler: handler, controller: controller, method: method);
+  void delete(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const []}) => 
+    _addBinding(path, HttpVerb.Delete, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void get(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Get, handler: handler, controller: controller, method: method);
+  void get(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
+    _addBinding(path, HttpVerb.Get, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void options(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Options, handler: handler, controller: controller, method: method);
+  void options(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
+    _addBinding(path, HttpVerb.Options, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void patch(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Patch, handler: handler, controller: controller, method: method);
+  void patch(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
+    _addBinding(path, HttpVerb.Patch, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void post(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Post, handler: handler, controller: controller, method: method);
+  void post(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
+    _addBinding(path, HttpVerb.Post, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void put(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Put, handler: handler, controller: controller, method: method);
+  void put(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
+    _addBinding(path, HttpVerb.Put, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void trace(String path, {RequestCallback? handler, Controller? controller, String? method}) => 
-    _addBinding(path, HttpVerb.Trace, handler: handler, controller: controller, method: method);
+  void trace(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
+    _addBinding(path, HttpVerb.Trace, handler: handler, controller: controller, method: method, middleware: middleware);
 
-  void _addBinding(String path, HttpVerb verb, {RequestCallback? handler, Controller? controller, String? method}) {
+  void _addBinding(String path, HttpVerb verb, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const []}) {
     if (handler != null) {
-      bindings.add(_FunctionBinding(verb: HttpVerb.Trace, path: path, callback: handler));
+      bindings.add(_FunctionBinding(verb: HttpVerb.Trace, path: path, callback: handler, middleware: middleware));
     } else if (controller != null && method != null) {
-      bindings.add(ControllerRouteBinding(verb: verb, path: path, controller: controller, methodName: method));
+      bindings.add(ControllerRouteBinding(verb: verb, path: path, controller: controller, methodName: method, middleware: middleware));
     } else {
       throw Exception('Unable to add binding');
     }
@@ -113,6 +116,21 @@ class Router {
             if (match != null) {
               var pathParams = extract(params, match);
               var req = Request(request: request, pathParams: pathParams)..setContainer(container);
+
+              // process router level middleware
+              if (middleware.isNotEmpty) {
+                middleware.forEach((element) {
+                  element(req);
+                });
+              }
+
+              // process binding level middleware
+              if (bindings[i].middleware.isNotEmpty) {
+                bindings[i].middleware.forEach((element) {
+                  element(req);
+                });
+              }
+
               var response = bindings[i].process(req);
               _renderResponse(request, response);
               break;

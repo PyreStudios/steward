@@ -40,4 +40,45 @@ void main() {
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
+
+  test('Router returns a response with a 404 error code when no match is found', () async {
+    router?.get('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
+    final client = HttpClient();
+    final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/does-not-exist');
+    final response = await request.close();
+    expect(response.statusCode, HttpStatus.notFound);
+  });
+
+  test('Router should trigger binding-specific middleware on all matched requests', () async {
+    var called = false;
+    router?.get('/', handler: (_) {
+      return Response.Ok('Success');
+    }, middleware: [(Request) {
+      called = true;
+    }]);
+
+    final client = HttpClient();
+    final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    await request.close();
+    expect(called, true); 
+  });
+
+  test('Router should trigger router-specific middleware on all matched requests', () async {
+    var called = false;
+    router?.middleware = [(Request) {
+      called = true;
+    }];
+    router?.get('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
+    final client = HttpClient();
+    final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    await request.close();
+    expect(called, true); 
+  });
+
 }

@@ -7,7 +7,7 @@ import 'package:drengr/controllers/controller.dart';
 class ControllerRouteBinding extends RouteBinding {
   Controller controller;
   String methodName;
-  ControllerRouteBinding({required HttpVerb verb, required String path, required this.controller, required this.methodName}): super(verb: verb, path: path);
+  ControllerRouteBinding({required HttpVerb verb, required String path, required this.controller, required this.methodName, middleware = const []}): super(verb: verb, path: path, middleware: middleware);
 
   @override
   Response process(Request request) {
