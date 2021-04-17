@@ -1,5 +1,5 @@
 name: drengr
-description: A sample command-line application.
+description: Drengr is a CLI and Framework for building expressive web servers in Dart.
 version: 0.0.3
 repository: https://www.github.com/pyrestudios/drengr
 
