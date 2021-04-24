@@ -17,12 +17,7 @@ Using the entire framework together (the App) gives you the following (but not l
 Here's an example of how you can use Drengr!
 
 ```dart
-import 'package:drengr/app/app.dart';
-import 'package:drengr/container/container.dart';
-import 'package:drengr/router/router.dart';
-import 'package:drengr/router/request.dart';
-import 'package:drengr/router/response.dart';
-import 'package:drengr/controllers/controller.dart';
+import 'package:drengr/drengr.dart';
 
 // You can pull me out to a separate file, too ya know ;)
 class SampleController extends Controller {
