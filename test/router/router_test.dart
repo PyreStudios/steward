@@ -41,6 +41,51 @@ void main() {
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
 
+  test('Router responds appropriately to simple PUT requests', () async {
+    router?.put('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
+    final client = HttpClient();
+    final request = await client.put(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first, equals('Success'));
+  });
+
+  test('Router responds appropriately to simple DELETE requests', () async {
+    router?.delete('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
+    final client = HttpClient();
+    final request = await client.delete(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first, equals('Success'));
+  });
+
+  test('Router responds appropriately to simple PATCH requests', () async {
+    router?.patch('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
+    final client = HttpClient();
+    final request = await client.patch(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first, equals('Success'));
+  });
+
+  test('Router responds appropriately to simple HEAD requests', () async {
+    router?.head('/', handler: (_) {
+      return Response.Ok('Success');
+    });
+
+    final client = HttpClient();
+    final request = await client.head(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(response.statusCode, equals(HttpStatus.ok));
+  });
+
+
   test('Router returns a response with a 404 error code when no match is found', () async {
     router?.get('/', handler: (_) {
       return Response.Ok('Success');

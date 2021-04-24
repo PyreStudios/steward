@@ -79,6 +79,10 @@ class Router {
   void trace(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
     _addBinding(path, HttpVerb.Trace, handler: handler, controller: controller, method: method, middleware: middleware);
 
+  void head(String path, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const[]}) => 
+    _addBinding(path, HttpVerb.Head, handler: handler, controller: controller, method: method, middleware: middleware);
+
+
   void _addBinding(String path, HttpVerb verb, {RequestCallback? handler, Controller? controller, String? method, List<MiddlewareFunc> middleware = const []}) {
     if (handler != null) {
       bindings.add(_FunctionBinding(verb: HttpVerb.Trace, path: path, callback: handler, middleware: middleware));
