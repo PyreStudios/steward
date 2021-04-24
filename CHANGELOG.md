@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Tests around HEAD, PUT, PATCH, and DELETE in the router
+- You can now simply import `package:drengr/drengr.dart` to bring the entire drengr suite into scope.
 
 ### Changed
 - Description in Pubspec.yaml
+- Router package now exports the request and response classes as well, since theyre coupled.
 
 ## [0.0.3] - 2021-04-17
 ### Added

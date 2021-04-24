@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:drengr/controllers/controller.dart';
-import 'package:drengr/container/container.dart';
+import 'package:drengr/drengr.dart';
 import 'package:drengr/controllers/view_not_found_error.dart';
 import 'package:test/test.dart';
 

@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:drengr/container/container.dart';
+import 'package:drengr/drengr.dart';
 
 void main() {
   group('Container tests', () {

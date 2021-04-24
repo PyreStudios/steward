@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:drengr/router/response.dart';
-import 'package:drengr/router/router.dart';
+import 'package:drengr/drengr.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -101,7 +100,7 @@ void main() {
     var called = false;
     router?.get('/', handler: (_) {
       return Response.Ok('Success');
-    }, middleware: [(Request) {
+    }, middleware: [(request) {
       called = true;
     }]);
 
@@ -113,7 +112,7 @@ void main() {
 
   test('Router should trigger router-specific middleware on all incoming requests', () async {
     var called = false;
-    router?.middleware = [(Request) {
+    router?.middleware = [(request) {
       called = true;
     }];
 
