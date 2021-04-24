@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Description in Pubspec.yaml
 - Router package now exports the request and response classes as well, since theyre coupled.
+- Simplified the generated seed-code to use the simplified imports changes captured in #4
 
 ## [0.0.3] - 2021-04-17
 ### Added

@@ -74,11 +74,7 @@ var viewTemplate = '''<!DOCTYPE html>
 ''';
 
 var appTemplate = '''
-import 'package:drengr/app/app.dart';
-import 'package:drengr/container/container.dart';
-import 'package:drengr/router/router.dart';
-import 'package:drengr/router/request.dart';
-import 'package:drengr/router/response.dart';
+import 'package:drengr/drengr.dart';
 import 'package:{{{name}}}/controllers/sample_controller.dart';
 
 Future main() async {
@@ -108,9 +104,7 @@ Future main() async {
 }
 ''';
 
-var controllerTemplate = '''import 'package:drengr/controllers/controller.dart';
-import 'package:drengr/router/request.dart';
-import 'package:drengr/router/response.dart';
+var controllerTemplate = '''import 'package:drengr/drengr.dart';
 class SimpleController extends Controller {
   Response home(Request request) {
     return view('main');
