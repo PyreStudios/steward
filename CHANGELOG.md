@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Tests around HEAD, PUT, PATCH, and DELETE in the router
-- You can now simply import `package:drengr/drengr.dart` to bring the entire drengr suite into scope.
+- You can now simply import `package:steward/steward.dart` to bring the entire steward suite into scope.
 
 ### Changed
 - Description in Pubspec.yaml
@@ -18,14 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.3] - 2021-04-17
 ### Added
 - Added support for middleware functions
-- Added the requestLogger middleware that ships with Drengr
+- Added the requestLogger middleware that ships with Steward
 - Tests around the router, middleware, and controllers.
 
 ### Fixed
-- Drengr CLI new was not adding imports to the generated controller
+- Steward CLI new was not adding imports to the generated controller
 
 ## [0.0.2] - 2021-04-11
 ### Added
-- Initial public release of Drengr. It's still light with much more to come, but the current pieces work well.
+- Initial public release of Steward. It's still light with much more to come, but the current pieces work well.
 - Add support for Mustache templates and view binding from controllers.
 - Add support for wiring up controllers to the router.

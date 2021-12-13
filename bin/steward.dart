@@ -1,4 +1,4 @@
-import 'package:drengr/drengr.dart' as drengr;
+import 'package:steward/steward.dart' as steward;
 import './help.dart' as help;
 import './new.dart' as newCmd;
 import './create.dart' as createCmd;
