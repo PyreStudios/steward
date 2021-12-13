@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:drengr/drengr.dart';
-import 'package:drengr/controllers/view_not_found_error.dart';
+import 'package:steward/steward.dart';
+import 'package:steward/controllers/view_not_found_error.dart';
 import 'package:test/test.dart';
 
 class TestController extends Controller {}

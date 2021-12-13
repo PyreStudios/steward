@@ -2,7 +2,7 @@ import 'dart:io';
 
 var configTemplate = '''---
 app:
-  name: My Drengr App
+  name: My Steward App
   port: 4040
 ''';
 
@@ -54,9 +54,9 @@ var viewTemplate = '''<!DOCTYPE html>
           is-5-widescreen is-offset-1-widescreen
           is-5-fullhd is-offset-1-fullhd">
             <h1 class="title titled is-1 mb-6">
-              Congrats on starting your first Drengr app.
+              Congrats on starting your first Steward app.
             </h1>
-            <h2 class=" subtitled subtitle has-text-grey is-4 has-text-weight-normal is-family-sans-serif">
+            <h2 class="subtitled subtitle has-text-grey is-4 has-text-weight-normal is-family-sans-serif">
               Don't be afraid to check out the documentation for more information.
             </h2>
             <div class="buttons">
@@ -74,7 +74,7 @@ var viewTemplate = '''<!DOCTYPE html>
 ''';
 
 var appTemplate = '''
-import 'package:drengr/drengr.dart';
+import 'package:steward/steward.dart';
 import 'package:{{{name}}}/controllers/sample_controller.dart';
 
 Future main() async {
@@ -104,7 +104,7 @@ Future main() async {
 }
 ''';
 
-var controllerTemplate = '''import 'package:drengr/drengr.dart';
+var controllerTemplate = '''import 'package:steward/steward.dart';
 class SimpleController extends Controller {
   Response home(Request request) {
     return view('main');
@@ -137,8 +137,8 @@ void newApp(List<String> arguments) {
 
   Directory.current = Directory('./$name');
 
-  Process.runSync('dart', ['pub', 'add', 'drengr']);
+  Process.runSync('dart', ['pub', 'add', 'steward']);
 
   print(
-      'Generated new Drengr project in directory: $name');
+      'Generated new Steward project in directory: $name');
 }
