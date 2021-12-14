@@ -1,4 +1,5 @@
 import 'package:steward/router/request.dart';
 import 'package:steward/router/response.dart';
 
-typedef MiddlewareFunc = Response? Function(Request);
+typedef Handler = Response Function(Request);
+typedef MiddlewareFunc = Handler Function(Handler nextHandler);

@@ -4,11 +4,11 @@ import 'package:steward/router/request.dart';
 
 Future main() async {
   var router = Router();
-  router.get('/hello', (Request request) {
+  router.get('/hello', handler: (Request request) {
     return Response.Ok('Hello World!');
   });
 
-  router.get('/:name', (Request request) {
+  router.get('/:name', handler: (Request request) {
     return Response.Ok(request.pathParams['name']);
   });
 

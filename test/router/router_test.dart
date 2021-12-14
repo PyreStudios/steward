@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:pedantic/pedantic.dart';
+import 'package:steward/middleware/middleware.dart';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
 void main() {
-
   Router? router;
 
   setUp(() async {
     router = Router();
-    router?.serveHTTP();
+    await router?.serveHTTP();
   });
 
   tearDown(() async {
@@ -24,7 +25,8 @@ void main() {
     });
 
     final client = HttpClient();
-    final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
@@ -35,7 +37,8 @@ void main() {
     });
 
     final client = HttpClient();
-    final request = await client.post(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.post(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
@@ -46,7 +49,8 @@ void main() {
     });
 
     final client = HttpClient();
-    final request = await client.put(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.put(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
@@ -57,7 +61,8 @@ void main() {
     });
 
     final client = HttpClient();
-    final request = await client.delete(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.delete(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
@@ -68,7 +73,8 @@ void main() {
     });
 
     final client = HttpClient();
-    final request = await client.patch(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.patch(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
@@ -79,47 +85,64 @@ void main() {
     });
 
     final client = HttpClient();
-    final request = await client.head(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.head(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(response.statusCode, equals(HttpStatus.ok));
   });
 
-
-  test('Router returns a response with a 404 error code when no match is found', () async {
+  test('Router returns a response with a 404 error code when no match is found',
+      () async {
     router?.get('/', handler: (_) {
       return Response.Ok('Success');
     });
 
     final client = HttpClient();
-    final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/does-not-exist');
+    final request = await client.get(
+        InternetAddress.loopbackIPv4.host, 4040, '/does-not-exist');
     final response = await request.close();
     expect(response.statusCode, HttpStatus.notFound);
   });
 
-  test('Router should trigger binding-specific middleware on all matched requests', () async {
+  test(
+      'Router should trigger binding-specific middleware on all matched requests',
+      () async {
     var called = false;
     router?.get('/', handler: (_) {
       return Response.Ok('Success');
-    }, middleware: [(request) {
-      called = true;
-    }]);
+    }, middleware: [
+      (Handler next) {
+        called = true;
+        return (Request request) {
+          return next(request);
+        };
+      }
+    ]);
 
     final client = HttpClient();
-    final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
     await request.close();
     expect(called, true);
   });
 
-  test('Router should trigger router-specific middleware on all incoming requests', () async {
+  test(
+      'Router should trigger router-specific middleware on all incoming requests',
+      () async {
     var called = false;
-    router?.middleware = [(request) {
-      called = true;
-    }];
+    router?.middleware = [
+      (Handler next) {
+        called = true;
+        return (Request request) {
+          return next(request);
+        };
+      }
+    ];
 
     final client = HttpClient();
-    final request = await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
     await request.close();
     expect(called, true);
   });
-
 }

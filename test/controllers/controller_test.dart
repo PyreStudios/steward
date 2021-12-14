@@ -4,7 +4,10 @@ import 'package:steward/steward.dart';
 import 'package:steward/controllers/view_not_found_error.dart';
 import 'package:test/test.dart';
 
-class TestController extends Controller {}
+class TestController extends Controller {
+  @Injectable('@SecretKey')
+  late String secretKey;
+}
 
 void main() {
   late TestController controller;
@@ -12,7 +15,15 @@ void main() {
   setUp(() {
     controller = TestController();
     container = Container();
+    container.bind<String>('@SecretKey', (_) => 'secret');
     controller.setContainer(container);
+  });
+
+  group('Injectables', () {
+    test('should inject a value', () {
+      var controller = initializer<TestController>(TestController, container);
+      expect(controller.secretKey, 'secret');
+    });
   });
 
   group('.view', () {
@@ -29,7 +40,8 @@ void main() {
     });
 
     test('Throws an error when the view cant be found', () async {
-      expect(() => controller.view('unknown_view'), throwsA(TypeMatcher<ViewNotFoundError>()));
+      expect(() => controller.view('unknown_view'),
+          throwsA(TypeMatcher<ViewNotFoundError>()));
     });
   });
 }

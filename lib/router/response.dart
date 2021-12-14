@@ -15,27 +15,22 @@ class Response {
 
   Response(this.statusCode, {this.body});
 
-  Response.Ok(dynamic body) :
-    this(HttpStatus.ok, body: body);
+  Response.Ok([dynamic body]) : this(HttpStatus.ok, body: body);
 
-  Response.Created(dynamic body) :
-    this(HttpStatus.created, body: body);
+  Response.Created([dynamic body]) : this(HttpStatus.created, body: body);
 
-  Response.BadRequest(dynamic body) :
-    this(HttpStatus.badRequest, body: body);
+  Response.BadRequest([dynamic body]) : this(HttpStatus.badRequest, body: body);
 
-  Response.Unauthorized(dynamic body) :
-    this(HttpStatus.unauthorized, body: body);
+  Response.Unauthorized([dynamic body])
+      : this(HttpStatus.unauthorized, body: body);
 
-  Response.Forbidden(dynamic body) :
-    this(HttpStatus.forbidden, body: body);
+  Response.Forbidden([dynamic body]) : this(HttpStatus.forbidden, body: body);
 
-  Response.NotFound(dynamic body) :
-    this(HttpStatus.notFound, body: body);
+  Response.NotFound([dynamic body]) : this(HttpStatus.notFound, body: body);
 
-  Response.InternalServerError(dynamic body) :
-    this(HttpStatus.internalServerError, body: body);
+  Response.InternalServerError([dynamic body])
+      : this(HttpStatus.internalServerError, body: body);
 
-  Response.Boom(dynamic body) :
-    this(HttpStatus.internalServerError, body: body);
+  Response.Boom([dynamic body])
+      : this(HttpStatus.internalServerError, body: body);
 }

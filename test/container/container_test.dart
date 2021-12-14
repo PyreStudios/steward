@@ -5,25 +5,27 @@ void main() {
   group('Container tests', () {
     test('should bind and resolve properly', () {
       var container = Container();
-      container.bind('key', (Container container) {
+      container.bind<String>('key', (Container container) {
         return 'ABC123';
       });
 
-      var key = container.make('key');
+      var key = container.make<String>('key');
       expect(key, 'ABC123');
     });
 
-    test('container items should be able to be built with other container items', () {
+    test(
+        'container items should be able to be built with other container items',
+        () {
       var container = Container();
-      container.bind('key', (Container container) {
+      container.bind<String>('key', (Container container) {
         return 'ABC';
       });
 
-      container.bind('full_key', (Container container) {
-        return container.make('key') + '123';
+      container.bind<String>('full_key', (Container container) {
+        return container.make<String>('key') + '123';
       });
 
-      expect(container.make('full_key'), 'ABC123');
+      expect(container.make<String>('full_key'), 'ABC123');
     });
 
     test('should throw an exception when an unbound binding is made', () {
@@ -32,5 +34,3 @@ void main() {
     });
   });
 }
-
-
