@@ -12,10 +12,10 @@ class UserService {
 
 class Cont extends Controller {
   @Get('/')
-  String get(_) => userService.gimme();
+  String get(_) => userService?.gimme() ?? 'no user service in container';
 
   @Injectable('UserService')
-  late UserService userService;
+  late UserService? userService;
 }
 
 void main() {
@@ -52,7 +52,7 @@ void main() {
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first,
-        equals('controller get response'));
+        equals('no user service in container'));
   });
 
   test('Router injects container items into mounted Controller', () async {
