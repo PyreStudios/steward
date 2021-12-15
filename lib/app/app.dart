@@ -25,7 +25,7 @@ class App {
 
   /// Create a container for us if one is not in scope
   void initializeContainer() {
-    container ??= Container();
+    container ??= CacheContainer();
   }
 
   /// Loads and parses the config file, then flattens the config map

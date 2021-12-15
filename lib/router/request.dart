@@ -3,7 +3,7 @@ import 'package:steward/container/container.dart';
 
 class Request {
   HttpRequest request;
-  Container container = Container();
+  Container container = CacheContainer();
   Map<String, dynamic> pathParams;
 
   Request({required this.request, this.pathParams = const {}});
