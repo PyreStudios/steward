@@ -1,5 +1,12 @@
-# Steward
-## A helpful framework for building server-side experiences with Dart.
+<p align="center">
+  <img width="240px" style="margin: 0 auto; display: block;" src="https://user-images.githubusercontent.com/1455979/146241297-3b1dc419-e312-4e61-81e0-37d6dde00e21.png" alt="Steward"/>
+  
+  <h2 align="center">A helpful framework for building server-side experiences with Dart.</h2>
+
+</p>
+
+-----------
+
 
 Steward features a command line interface for starting a new Steward project! Check it out!
 
