@@ -1,7 +1,7 @@
 import 'package:steward/steward.dart' as steward;
 import './help.dart' as help;
-import './new.dart' as newCmd;
-import './create.dart' as createCmd;
+import './new.dart' as new_cmd;
+import './create.dart' as create_cmd;
 
 void main(List<String> arguments) {
   if (arguments.isEmpty) {
@@ -11,10 +11,10 @@ void main(List<String> arguments) {
   var action = arguments[0];
   switch (action) {
     case 'new':
-      newCmd.newApp(arguments);
+      new_cmd.newApp(arguments);
       break;
     case 'create':
-      /*createCmd.create(arguments);*/
+      /*create_cmd.create(arguments);*/
       break;
     default:
       help.showHelp();

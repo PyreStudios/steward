@@ -1,7 +1,3 @@
-import 'dart:mirrors';
-
-import 'package:steward/controllers/controller.dart';
-
 /// A rudimentary DI container implementation
 /// container bindings are created as needed.
 class Container {
@@ -15,8 +11,11 @@ class Container {
   }
 
   /// Generate an item for a given key
-  T make<T>(String key) {
-    return bindings[key](this);
+  T? make<T>(String key) {
+    if (bindings.containsKey(key)) {
+      return bindings[key](this);
+    }
+    return null;
   }
 }
 

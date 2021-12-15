@@ -5,11 +5,9 @@ import 'package:steward/router/router.dart';
 import 'package:steward/container/container.dart';
 import 'package:steward/config/config_reader.dart';
 
-
 class AppConfigurationException implements Exception {}
 
 class App {
-
   Router router;
   Container? container;
 
@@ -20,13 +18,13 @@ class App {
     loadConfigIntoContainer();
     loadViewsIntoContainer();
 
-    router.container ??= container;
+    router.container = container!;
 
     return await router.serveHTTP();
   }
 
   /// Create a container for us if one is not in scope
-  void initializeContainer () {
+  void initializeContainer() {
     container ??= Container();
   }
 
@@ -39,26 +37,28 @@ class App {
     var config = configReader.parsed;
     var flat = flatten(config);
     flat.entries.forEach((element) {
-      container?.bind('@config.'+element.key, (_) => element.value);
+      container?.bind('@config.' + element.key, (_) => element.value);
     });
   }
 
   void loadViewsIntoContainer() {
     try {
       var files = Directory('./views')
-        .listSync(recursive: true, followLinks: true)
-        .whereType<File>()
-        .where((file) => file.path.endsWith('.mustache'))
-        .map((file) => {
-          'path': file.path,
-          'contents': file.readAsStringSync()
-        });
+          .listSync(recursive: true, followLinks: true)
+          .whereType<File>()
+          .where((file) => file.path.endsWith('.mustache'))
+          .map((file) =>
+              {'path': file.path, 'contents': file.readAsStringSync()});
       files.forEach((file) {
-        var key = file['path']?.replaceAll('/', '.').replaceFirst('..views.', '').replaceFirst('.mustache', '');
+        var key = file['path']
+            ?.replaceAll('/', '.')
+            .replaceFirst('..views.', '')
+            .replaceFirst('.mustache', '');
         container?.bind('@views.$key', (_) => file['contents']);
       });
     } catch (e) {
-      print('Failed to load views. Please ensure that there is a `views` subfolder in your application.');
+      print(
+          'Failed to load views. Please ensure that there is a `views` subfolder in your application.');
     }
   }
 }

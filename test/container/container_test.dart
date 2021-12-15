@@ -22,15 +22,15 @@ void main() {
       });
 
       container.bind<String>('full_key', (Container container) {
-        return container.make<String>('key') + '123';
+        return container.make<String>('key')! + '123';
       });
 
       expect(container.make<String>('full_key'), 'ABC123');
     });
 
-    test('should throw an exception when an unbound binding is made', () {
+    test('should return null when an unbound binding is made', () {
       var container = Container();
-      expect(() => container.make('key'), throwsNoSuchMethodError);
+      expect(container.make('key'), null);
     });
   });
 }

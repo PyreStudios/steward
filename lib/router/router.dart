@@ -3,7 +3,6 @@ import 'dart:mirrors';
 
 import 'package:steward/container/container.dart';
 import 'package:steward/controllers/controller.dart';
-import 'package:steward/controllers/controller_route_binding.dart';
 import 'package:steward/controllers/verbs.dart';
 import 'package:steward/middleware/middleware.dart';
 import 'package:steward/router/response.dart';
@@ -49,7 +48,7 @@ class _FunctionBinding extends RouteBinding {
 }
 
 class Router {
-  Container? container;
+  Container container = Container();
   List<RouteBinding> bindings = [];
   List<MiddlewareFunc> middleware = [];
   HttpServer? server;
@@ -136,7 +135,7 @@ class Router {
   }
 
   Future serveHTTP() async {
-    var port = container?.make('@config.app.port') ?? 4040;
+    var port = container.make('@config.app.port') ?? 4040;
     server = await HttpServer.bind(
       InternetAddress.loopbackIPv4,
       port,
