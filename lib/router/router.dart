@@ -26,9 +26,6 @@ abstract class RouteBinding implements Processable {
 
   RouteBinding(
       {required this.verb, required this.path, this.middleware = const []});
-
-  @override
-  Response process(Request request);
 }
 
 class _FunctionBinding extends RouteBinding {
@@ -48,7 +45,7 @@ class _FunctionBinding extends RouteBinding {
 }
 
 class Router {
-  Container container = Container();
+  Container container = CacheContainer();
   List<RouteBinding> bindings = [];
   List<MiddlewareFunc> middleware = [];
   HttpServer? server;

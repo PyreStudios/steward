@@ -4,7 +4,7 @@ import 'package:steward/steward.dart';
 void main() {
   group('Container tests', () {
     test('should bind and resolve properly', () {
-      var container = Container();
+      var container = CacheContainer();
       container.bind<String>('key', (Container container) {
         return 'ABC123';
       });
@@ -16,7 +16,7 @@ void main() {
     test(
         'container items should be able to be built with other container items',
         () {
-      var container = Container();
+      var container = CacheContainer();
       container.bind<String>('key', (Container container) {
         return 'ABC';
       });
@@ -29,7 +29,7 @@ void main() {
     });
 
     test('should return null when an unbound binding is made', () {
-      var container = Container();
+      var container = CacheContainer();
       expect(container.make('key'), null);
     });
   });

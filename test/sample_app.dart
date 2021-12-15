@@ -29,7 +29,7 @@ Future main() async {
     return Response.Ok(request.pathParams['name']);
   });
 
-  var container = Container();
+  var container = CacheContainer();
   var app = App(router: router, container: container);
 
   return app.start();

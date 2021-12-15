@@ -23,7 +23,7 @@ void main() {
 
   setUp(() {
     router = Router();
-    router.setDIContainer(Container());
+    router.setDIContainer(CacheContainer());
     router.serveHTTP();
   });
 

@@ -14,7 +14,7 @@ void main() {
   late Container container;
   setUp(() {
     controller = TestController();
-    container = Container();
+    container = CacheContainer();
     container.bind<String>('@SecretKey', (_) => 'secret');
     controller.setContainer(container);
   });
