@@ -2,16 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:pedantic/pedantic.dart';
+import 'package:steward/controllers/verbs.dart';
 import 'package:steward/middleware/middleware.dart';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
+class Cont extends Controller {
+  @Get('/')
+  String get(_) => 'controller get response';
+}
+
 void main() {
   Router? router;
 
-  setUp(() async {
+  setUp(() {
     router = Router();
-    await router?.serveHTTP();
+    router?.serveHTTP();
   });
 
   tearDown(() async {
@@ -20,7 +26,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple GET requests', () async {
-    router?.get('/', handler: (_) {
+    router?.get('/', (_) {
       return Response.Ok('Success');
     });
 
@@ -31,8 +37,20 @@ void main() {
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
 
+  test('Router responds appropriately to simple GET requests w/ Controller',
+      () async {
+    router?.mount(Cont);
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first,
+        equals('controller get response'));
+  });
+
   test('Router responds appropriately to simple POST requests', () async {
-    router?.post('/', handler: (_) {
+    router?.post('/', (_) {
       return Response.Ok('Success');
     });
 
@@ -44,7 +62,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple PUT requests', () async {
-    router?.put('/', handler: (_) {
+    router?.put('/', (_) {
       return Response.Ok('Success');
     });
 
@@ -56,7 +74,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple DELETE requests', () async {
-    router?.delete('/', handler: (_) {
+    router?.delete('/', (_) {
       return Response.Ok('Success');
     });
 
@@ -68,7 +86,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple PATCH requests', () async {
-    router?.patch('/', handler: (_) {
+    router?.patch('/', (_) {
       return Response.Ok('Success');
     });
 
@@ -80,7 +98,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple HEAD requests', () async {
-    router?.head('/', handler: (_) {
+    router?.head('/', (_) {
       return Response.Ok('Success');
     });
 
@@ -93,7 +111,7 @@ void main() {
 
   test('Router returns a response with a 404 error code when no match is found',
       () async {
-    router?.get('/', handler: (_) {
+    router!.get('/', (_) {
       return Response.Ok('Success');
     });
 
@@ -108,7 +126,7 @@ void main() {
       'Router should trigger binding-specific middleware on all matched requests',
       () async {
     var called = false;
-    router?.get('/', handler: (_) {
+    router?.get('/', (_) {
       return Response.Ok('Success');
     }, middleware: [
       (Handler next) {

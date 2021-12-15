@@ -21,7 +21,8 @@ void main() {
 
   group('Injectables', () {
     test('should inject a value', () {
-      var controller = initializer<TestController>(TestController, container);
+      var controller =
+          initializer(TestController, container).reflectee as TestController;
       expect(controller.secretKey, 'secret');
     });
   });

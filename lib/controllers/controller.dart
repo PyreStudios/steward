@@ -29,7 +29,7 @@ abstract class Controller {
 }
 
 // Initializer initializes an instance of a class and fills it with dependencies from the container
-T initializer<T>(Type clazz, Container container) {
+InstanceMirror initializer(Type clazz, Container container) {
   final clazzDeclaration = reflectClass(clazz);
   final injectableMirror = reflectClass(Injectable);
   var instance = clazzDeclaration.newInstance(const Symbol(''), []);
@@ -45,5 +45,5 @@ T initializer<T>(Type clazz, Container container) {
     });
   });
 
-  return instance.reflectee as T;
+  return instance;
 }
