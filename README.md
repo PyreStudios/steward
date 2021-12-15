@@ -28,23 +28,39 @@ import 'package:steward/steward.dart';
 
 // You can pull me out to a separate file, too ya know ;)
 class SampleController extends Controller {
-  Response show(Request request) {
-    return view('main_template');
-  }
+  @Injectable('UserService')
+  late UserService userService;
+  
+  @Get('/version')
+  version(_) => 'v1.0';
+
+  @Get('/show')
+  Response show(Request request) => view('main_template');
+  
+  @Get('/users')
+  Response users => UserService.getUsers();
 }
 
 Future main() async {
   var router = Router();
-  // Controller example
-  router.get('/', controller: SimpleController(), method:'home');
+  var container = CacheContainer();
+  
+  // Setup a DI binding for UserService
+  container.bind('UserService', (_) => UserService());
+  
+  // Replace the default DI container implementation
+  router.setContainer(container)
+  
+  // Mount the controller, parsing the annotations to build paths and injecting injectables
+  router.mount(SimpleController);
   
   // Bare route handler example
-  router.get('/hello', handler: (Request request) {
+  router.get('/hello', (_) {
     return Response.Ok('Hello World!');
   });
   
   // Plucking things out of the container example
-  router.get('/config', handler: (Request request) {
+  router.get('/config', (Request request) {
     print(request.container);
     print(request.container.make('@config'));
     return Response.Ok(request.container.make('@config'));
@@ -55,8 +71,6 @@ Future main() async {
     return Response.Ok(request.pathParams['name']);
   });
   
-  var container = Container();
-  // Add your own DI objects to the container here
   var app = App(router: router, container: container);
   return app.start();
 }
