@@ -67,7 +67,7 @@ Future main() async {
   });
   
   // Path Params example
-  router.get('/:name', handler: (Request request) {
+  router.get('/:name', (Request request) {
     return Response.Ok(request.pathParams['name']);
   });
   
