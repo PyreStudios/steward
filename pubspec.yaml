@@ -4,7 +4,7 @@ version: 0.0.3
 repository: https://www.github.com/pyrestudios/steward
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.15.0 <3.0.0'
 
 dependencies:
 #  path: ^1.7.0
@@ -12,6 +12,7 @@ dependencies:
   flat: ^0.4.0
   mustache_template: ^2.0.0
   yaml: ^3.1.0
+  bosun: ^0.1.0
 
 dev_dependencies:
   pedantic: ^1.11.0

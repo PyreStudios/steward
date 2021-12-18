@@ -11,6 +11,8 @@ abstract class Controller {
   // Container must be set by the framework.
   late Container container;
 
+  /// view renders a view from the DI container and returns a response with that
+  /// processed view as the body of that response.
   Response view(String filename, {Map<String, dynamic> varMap = const {}}) {
     var templateString = '';
     try {
@@ -23,6 +25,8 @@ abstract class Controller {
     return Response.Ok(output)..headers.contentType = ContentType.html;
   }
 
+  /// setContainer sets the container for a controller.
+  /// As a consumer of this lib, You _probably_ dont need to call this.
   void setContainer(Container container) {
     this.container = container;
   }

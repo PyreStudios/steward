@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:bosun/bosun.dart';
+
 var configTemplate = '''---
 app:
   name: My Steward App
@@ -112,33 +114,38 @@ class SimpleController extends Controller {
 }
 ''';
 
-void newApp(List<String> arguments) {
-  if (arguments.length < 2) {
-    print('Help coming soon.');
+class NewCommand extends Command {
+  NewCommand()
+      : super(
+            command: 'new',
+            description: 'Create a new steward app',
+            example: 'steward new <app-name>');
+
+  @override
+  void run(List<String> args, Map<String, dynamic> flags) {
+    var name = args[0];
+
+    Process.runSync('dart', ['create', name, '--template', 'console-simple']);
+
+    var config = File('./$name/config.yml');
+    config.writeAsStringSync(configTemplate);
+    var viewsDir = Directory('$name/views');
+    var controllersDir = Directory('$name/controllers');
+    var assetsDir = Directory('$name/assets');
+    viewsDir.createSync();
+    controllersDir.createSync();
+    assetsDir.createSync();
+
+    // write initial files
+    File('$name/app.dart')
+        .writeAsStringSync(appTemplate.replaceAll('{{{name}}}', name));
+    File('$name/controllers/sample_controller.dart')
+        .writeAsStringSync(controllerTemplate);
+    File('$name/views/main.mustache').writeAsStringSync(viewTemplate);
+    Directory.current = Directory('./$name');
+
+    // Add steward to the generated pubspec
+    Process.runSync('dart', ['pub', 'add', 'steward']);
+    print('Generated new Steward project in directory: $name');
   }
-
-  var name = arguments[1];
-
-  Process.runSync('dart', ['create', name, '--template', 'console-simple']);
-
-  var config = File('./$name/config.yml');
-  config.writeAsStringSync(configTemplate);
-  var viewsDir = Directory('$name/views');
-  var controllersDir = Directory('$name/controllers');
-  var assetsDir = Directory('$name/assets');
-  viewsDir.createSync();
-  controllersDir.createSync();
-  assetsDir.createSync();
-
-  // write initial files
-  File('$name/app.dart').writeAsStringSync(appTemplate.replaceAll('{{{name}}}', name));
-  File('$name/controllers/sample_controller.dart').writeAsStringSync(controllerTemplate);
-  File('$name/views/main.mustache').writeAsStringSync(viewTemplate);
-
-  Directory.current = Directory('./$name');
-
-  Process.runSync('dart', ['pub', 'add', 'steward']);
-
-  print(
-      'Generated new Steward project in directory: $name');
 }
