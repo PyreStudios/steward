@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:steward/steward.dart';
+import 'package:steward/controllers/controller.dart';
 import 'package:steward/controllers/view_not_found_error.dart';
 import 'package:test/test.dart';
 
@@ -22,7 +23,8 @@ void main() {
   group('Injectables', () {
     test('should inject a value', () {
       var controller =
-          initializer(TestController, container).reflectee as TestController;
+          ControllerMirrorFactory.createMirror(TestController, container)
+              .reflectee as TestController;
       expect(controller.secretKey, 'secret');
     });
   });

@@ -1,7 +1,6 @@
 # Steward Router
 
-Steward's router is an essential routing mechanism for the Steward app, however, you can choose
-to use only the router if you prefer a more lightweight development experience.
+Steward's router is an essential routing mechanism for the Steward app, however, you can choose to use only the router if you prefer a more lightweight development experience.
 
 Steward's router uses path\_to\_regexp to provide a flexible routing layer.
 

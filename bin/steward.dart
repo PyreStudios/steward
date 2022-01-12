@@ -5,5 +5,7 @@ import './create.dart' as create_cmd;
 import 'package:bosun/bosun.dart' as bosun;
 
 void main(List<String> arguments) {
-  bosun.execute(bosun.BosunCommand('steward', subcommands: []), arguments);
+  bosun.execute(
+      bosun.BosunCommand('steward', subcommands: [new_cmd.NewCommand()]),
+      arguments);
 }

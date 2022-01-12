@@ -54,15 +54,16 @@ class Router {
     this.container = container;
   }
 
-  void mount(Type controller) {
-    final controllerDeclaration = reflectClass(controller);
+  void mount(Type controllerType) {
+    final controllerDeclaration = reflectClass(controllerType);
     final paths = getPaths(controllerDeclaration);
     paths.forEach((element) {
       bindings.add(_FunctionBinding(
           verb: element.verb,
           path: element.path,
           callback: (Request request) {
-            final _controller = initializer(controller, request.container);
+            final _controller = ControllerMirrorFactory.createMirror(
+                controllerType, request.container);
             final result =
                 _controller.invoke(element.method, [request]).reflectee;
             switch (result.runtimeType) {
