@@ -26,7 +26,8 @@ class CacheContainer implements Container {
   }
 }
 
-// Annotation to mark a class as injectable for the DI container to auto-inject
+/// Annotation to mark a class as injectable for the DI container to auto-inject
+/// injection is not automatic and must be done by the framework.
 class Injectable {
   const Injectable(this.containerKey);
   final String containerKey;

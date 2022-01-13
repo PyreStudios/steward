@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:mirrors';
 
 import 'package:steward/container/container.dart';
-import 'package:steward/controllers/controller.dart';
+import 'package:steward/controllers/controller_mirror_factory.dart';
 import 'package:steward/controllers/verbs.dart';
 import 'package:steward/middleware/middleware.dart';
 import 'package:steward/router/response.dart';
