@@ -15,8 +15,8 @@ class App {
 
   Future start() async {
     initializeContainer();
-    loadConfigIntoContainer();
-    loadViewsIntoContainer();
+    _loadConfigIntoContainer();
+    _loadViewsIntoContainer();
 
     router.container = container!;
 
@@ -31,7 +31,7 @@ class App {
   /// Loads and parses the config file, then flattens the config map
   /// and ultimately preprends "@config." to the key before adding that
   /// config item to the DI container.
-  void loadConfigIntoContainer() {
+  void _loadConfigIntoContainer() {
     var configFile = File('config.yml');
     var configReader = ConfigReader(file: configFile)..read();
     var config = configReader.parsed;
@@ -41,7 +41,7 @@ class App {
     });
   }
 
-  void loadViewsIntoContainer() {
+  void _loadViewsIntoContainer() {
     try {
       var files = Directory('./views')
           .listSync(recursive: true, followLinks: true)
