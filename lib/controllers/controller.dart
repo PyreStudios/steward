@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:mirrors';
 
 import 'package:steward/controllers/view_not_found_error.dart';
 import 'package:steward/container/container.dart';
@@ -29,27 +28,5 @@ abstract class Controller {
   /// As a consumer of this lib, You _probably_ dont need to call this.
   void setContainer(Container container) {
     this.container = container;
-  }
-}
-
-class ControllerMirrorFactory {
-  // createMirror initializes an instance of a class and fills it with dependencies from the container, then retturns a mirror of that instance.
-  static InstanceMirror createMirror(Type clazz, Container container) {
-    final clazzDeclaration = reflectClass(clazz);
-    final injectableMirror = reflectClass(Injectable);
-    var instance = clazzDeclaration.newInstance(const Symbol(''), []);
-
-    clazzDeclaration.declarations.forEach((key, value) {
-      value.metadata.forEach((meta) {
-        if (meta.type == injectableMirror) {
-          final injectable = (meta.reflectee as Injectable);
-          final key = injectable.containerKey;
-          final containerValue = container.make(key);
-          instance.setField(value.simpleName, containerValue);
-        }
-      });
-    });
-
-    return instance;
   }
 }
