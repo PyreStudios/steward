@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:steward/controllers/verbs.dart';
-import 'package:steward/middleware/middleware.dart';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
@@ -146,7 +145,7 @@ void main() {
     router.get('/', (_) {
       return Response.Ok('Success');
     }, middleware: [
-      (Handler next) {
+      (Response Function(Request) next) {
         called = true;
         return (Request request) {
           return next(request);
@@ -166,7 +165,7 @@ void main() {
       () async {
     var called = false;
     router.middleware = [
-      (Handler next) {
+      (Response Function(Request) next) {
         called = true;
         return (Request request) {
           return next(request);
