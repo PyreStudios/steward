@@ -1,8 +1,11 @@
 import 'package:steward/router/request.dart';
-import 'package:steward/router/response.dart';
 
+import 'middleware.dart';
 
 /// An extremely simple Middleware function that prints the incoming request URI
-Response? RequestLogger(Request request) {
-  print('Incoming Request: ${request.request.uri}');
+Handler RequestLogger(Handler next) {
+  return (Request request) {
+    print('Incoming Request: ${request.request.uri}');
+    return next(request);
+  };
 }
