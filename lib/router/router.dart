@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:mirrors';
 
 import 'package:steward/container/container.dart';
-import 'package:steward/controllers/controller_mirror_factory.dart';
+import 'package:steward/controllers/controller.dart';
 import 'package:steward/controllers/verbs.dart';
 import 'package:steward/middleware/middleware.dart';
 import 'package:steward/router/response.dart';
@@ -61,69 +61,54 @@ class Router {
       bindings.add(_FunctionBinding(
           verb: element.verb,
           path: element.path,
-          callback: (Request request) {
-            final _controller = ControllerMirrorFactory.createMirror(
-                controllerType, request.container);
-            final result =
-                _controller.invoke(element.method, [request]).reflectee;
-            switch (result.runtimeType) {
-              case Response:
-                return result;
-              default:
-                return Response(200, body: result);
-            }
-          },
+          callback: controllerItemRouteHandler(controllerType, element.method),
           middleware: middleware));
     });
   }
 
-  void connect(String path, RequestCallback? handler,
+  void connect(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Connect, handler, middleware: middleware);
 
-  void delete(String path, RequestCallback? handler,
+  void delete(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Delete, handler, middleware: middleware);
 
-  void get(String path, RequestCallback? handler,
+  void get(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Get, handler, middleware: middleware);
 
-  void options(String path, RequestCallback? handler,
+  void options(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Options, handler, middleware: middleware);
 
-  void patch(String path, RequestCallback? handler,
+  void patch(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Patch, handler, middleware: middleware);
 
-  void post(String path, RequestCallback? handler,
+  void post(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Post, handler, middleware: middleware);
 
-  void put(String path, RequestCallback? handler,
+  void put(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Put, handler, middleware: middleware);
 
-  void trace(String path, RequestCallback? handler,
+  void trace(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Trace, handler, middleware: middleware);
 
-  void head(String path, RequestCallback? handler,
+  void head(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Head, handler, middleware: middleware);
 
-  void _addBinding(String path, HttpVerb verb, RequestCallback? handler,
+  void _addBinding(String path, HttpVerb verb, RequestCallback handler,
       {List<MiddlewareFunc> middleware = const []}) {
-    if (handler != null) {
-      bindings.add(_FunctionBinding(
-          verb: HttpVerb.Trace,
-          path: path,
-          callback: handler,
-          middleware: middleware));
-    } else {
-      throw Exception('Unable to add binding');
-    }
+    bindings.add(_FunctionBinding(
+        verb: HttpVerb.Trace,
+        path: path,
+        callback: handler,
+        middleware: middleware));
   }
 
   /// forcibly shut down the server
@@ -164,7 +149,7 @@ class Router {
             });
 
             var response = handler(req);
-            _renderResponse(request, response);
+            writeResponse(request, response);
             break;
           }
         }
@@ -179,17 +164,10 @@ class Router {
         });
 
         var response = handler(Request(request: request));
-        _renderResponse(request, response);
+        writeResponse(request, response);
       }
 
       await request.response.close();
     }
-  }
-
-  void _renderResponse(HttpRequest request, Response response) {
-    request.response.headers.contentType = response.headers.contentType;
-    request.response.headers.date = response.headers.date;
-    request.response.statusCode = response.statusCode;
-    request.response.write(response.body);
   }
 }

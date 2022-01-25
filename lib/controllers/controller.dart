@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:steward/controllers/view_not_found_error.dart';
 import 'package:steward/container/container.dart';
 import 'package:mustache_template/mustache.dart';
+import 'package:steward/router/request.dart';
 import 'package:steward/router/response.dart';
+
+import 'controller_mirror_factory.dart';
 
 // Controller is an abstract class set up to model what a controller has access to.
 abstract class Controller {
@@ -29,4 +32,19 @@ abstract class Controller {
   void setContainer(Container container) {
     this.container = container;
   }
+}
+
+Response Function(Request request) controllerItemRouteHandler(
+    Type controllerType, Symbol methodName) {
+  return (Request request) {
+    final _controller =
+        ControllerMirrorFactory.createMirror(controllerType, request.container);
+    final result = _controller.invoke(methodName, [request]).reflectee;
+    switch (result.runtimeType) {
+      case Response:
+        return result;
+      default:
+        return Response(200, body: result);
+    }
+  };
 }
