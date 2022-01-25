@@ -30,7 +30,7 @@ Future main() async {
   });
 
   var container = CacheContainer();
-  var app = App(router: router, container: container);
+  var app = App(router: router);
 
   return app.start();
 }

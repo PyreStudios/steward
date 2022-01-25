@@ -97,9 +97,8 @@ Future main() async {
   });
 
 
-  var container = Container();
   // Add your own DI objects to the container here
-  var app = App(router: router, container: container);
+  var app = App(router: router);
 
   return app.start();
 

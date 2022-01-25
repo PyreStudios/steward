@@ -7,7 +7,7 @@ const _headersKey = 'Access-Control-Allow-Headers';
 class Headers {
   ContentType contentType = ContentType.json;
   DateTime? date = DateTime.now();
-  Map<String, List<String>> _headers = {};
+  final Map<String, List<String>> _headers = {};
 
   Headers();
 
@@ -70,8 +70,8 @@ void writeResponse(HttpRequest request, Response response) {
     request.response.headers.set(_originKey, response.headers[_originKey]!);
   }
 
-  if (response.headers[_headersKey] != null) {
-    request.response.headers.set(_headersKey, response.headers[_headersKey]!);
+  if (response.headers[_methodsKey] != null) {
+    request.response.headers.set(_methodsKey, response.headers[_methodsKey]!);
   }
 
   request.response.statusCode = response.statusCode;

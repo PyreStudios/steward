@@ -14,11 +14,11 @@ Steward features a command line interface for starting a new Steward project! Ch
 
 The best examples for how to use Steward are captured in the test folder. Eventually, we'll refactor this out into tests and examples separately, but for now, they live together :)
 
-Steward is (somewhat) composable. If you only want to use the Router, you can only use the router. If you want to use the whole framework, that works too! Of course, there are some things that don't make sense to be used alone (Controllers, for example).
-
-Using the entire framework together (the App) gives you the following (but not limited to) benefits:
-- First class support (this is the way we use Steward too!)
+Using the Steward framework gives you the following (but not limited to) benefits:
 - A modular system with light Dependency Injection, Routing, Controllers, and more.
+- Automatic dependency injection into controllers when mounting into routers.
+- Easy HTTP request/response management.
+- Config parsing into the DI container at application boot.
 - Templating via the Mustache template specification.
 
 Here's an example of how you can use Steward!
@@ -71,7 +71,7 @@ Future main() async {
     return Response.Ok(request.pathParams['name']);
   });
   
-  var app = App(router: router, container: container);
+  var app = App(router: router);
   return app.start();
 }
 ```
