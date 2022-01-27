@@ -1,5 +1,4 @@
 import 'package:steward/app/app.dart';
-import 'package:steward/container/container.dart';
 import 'package:steward/controllers/controller.dart';
 import 'package:steward/controllers/verbs.dart';
 import 'package:steward/router/router.dart';
@@ -29,7 +28,6 @@ Future main() async {
     return Response.Ok(request.pathParams['name']);
   });
 
-  var container = CacheContainer();
   var app = App(router: router);
 
   return app.start();

@@ -6,7 +6,7 @@ import 'package:yaml/yaml.dart';
 class ConfigReader {
   File file;
 
-  Map<String, Object> parsed = {};
+  Map<String, dynamic> parsed = {};
 
   ConfigReader({required this.file});
 
