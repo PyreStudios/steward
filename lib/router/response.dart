@@ -5,7 +5,7 @@ const _methodsKey = 'Access-Control-Allow-Methods';
 const _headersKey = 'Access-Control-Allow-Headers';
 
 class Headers {
-  ContentType contentType = ContentType.json;
+  ContentType? contentType;
   DateTime? date = DateTime.now();
   final Map<String, List<String>> _headers = {};
 
@@ -59,6 +59,15 @@ class Response {
 /// writeResponse takes in an HTTP request and a steward response, and writes the
 /// contents of the steward response to the HTTP response.
 void writeResponse(HttpRequest request, Response response) {
+  // if we dont know what the content type is at this point, we infer it.
+  if (response.headers.contentType == null) {
+    var jsonRegex = RegExp('/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/');
+    if (jsonRegex.hasMatch(response.body.toString())) {
+      response.headers.contentType = ContentType.json;
+    } else {
+      response.headers.contentType = ContentType.text;
+    }
+  }
   request.response.headers.contentType = response.headers.contentType;
   request.response.headers.date = response.headers.date;
 
