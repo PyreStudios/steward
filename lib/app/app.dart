@@ -9,21 +9,17 @@ class AppConfigurationException implements Exception {}
 
 class App {
   Router router;
-  late Container container;
+  late Container _container;
 
-  App({required this.router});
+  App({required this.router}) {
+    _container = router.container;
+  }
 
   Future start() async {
-    initializeContainer();
     _loadConfigIntoContainer();
     _loadViewsIntoContainer();
 
     return await router.serveHTTP();
-  }
-
-  /// Create a container for us if one is not in scope
-  void initializeContainer() {
-    container = router.container;
   }
 
   /// Loads and parses the config file, then flattens the config map
@@ -35,7 +31,7 @@ class App {
     var config = configReader.parsed;
     var flat = flatten(config);
     flat.entries.forEach((element) {
-      container.bind('@config.' + element.key, (_) => element.value);
+      _container.bind('@config.' + element.key, (_) => element.value);
     });
   }
 
@@ -52,7 +48,7 @@ class App {
             ?.replaceAll('/', '.')
             .replaceFirst('..views.', '')
             .replaceFirst('.mustache', '');
-        container.bind('@views.$key', (_) => file['contents']);
+        _container.bind('@views.$key', (_) => file['contents']);
       });
     } catch (e) {
       print(
