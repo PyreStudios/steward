@@ -2,6 +2,6 @@
 sidebar_position: 3
 ---
 
-# The Router Itself
+# The Router
 
-TODO: Learn about the router
+The Router handles setting up request bindings and writing Steward responses to the actual HTTP response.
