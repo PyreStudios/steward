@@ -9,7 +9,7 @@ const config = {
   title: 'Steward Documentation',
   tagline: 'A helpful framework for building server-side experiences with Dart',
   url: 'https://your-docusaurus-test-site.com',
-  baseUrl: '/',
+  baseUrl: '/steward/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
