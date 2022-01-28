@@ -7,6 +7,8 @@
 
 -----------
 
+Eventually, full-fledged docs will live here: [https://pyrestudios.github.io/steward](https://pyrestudios.github.io/steward).
+
 
 Steward features a command line interface for starting a new Steward project! Check it out!
 
