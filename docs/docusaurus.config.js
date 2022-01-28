@@ -15,6 +15,8 @@ const config = {
   favicon: 'img/favicon.ico',
   organizationName: 'PyreStudios', // Usually your GitHub org/user name.
   projectName: 'steward', // Usually your repo name.
+  deploymentBranch: 'main',
+  trailingSlash: false,
 
   presets: [
     [
