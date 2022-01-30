@@ -87,9 +87,8 @@ Future main() async {
   });
 
   router.get('/config', handler: (Request request) {
-    print(request.container);
-    print(request.container.make('@config'));
-    return Response.Ok(request.container.make('@config'));
+    print(request.container.make('@config.app.name'));
+    return Response.Ok(request.container.make('@config.app.name'));
   });
 
   router.get('/:name', handler: (Request request) {

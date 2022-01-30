@@ -63,9 +63,8 @@ Future main() async {
   
   // Plucking things out of the container example
   router.get('/config', (Request request) {
-    print(request.container);
-    print(request.container.make('@config'));
-    return Response.Ok(request.container.make('@config'));
+    print(request.container.make('@config.app.name'));
+    return Response.Ok(request.container.make('@config.app.name'));
   });
   
   // Path Params example
