@@ -4,4 +4,4 @@ sidebar_position: 6
 
 # Installation and Requirements
 
-TODO: Add information about installation and requirements (dart version, for example)
+Steward is only supported on Dart 2.15.0+.
