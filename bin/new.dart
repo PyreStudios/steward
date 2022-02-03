@@ -82,16 +82,16 @@ import 'package:{{{name}}}/controllers/sample_controller.dart';
 Future main() async {
   var router = Router();
   router.get('/', controller: SimpleController(), method:'home');
-  router.get('/hello', handler: (Request request) {
+  router.get('/hello', handler: (Request request) async {
     return Response.Ok('Hello World!');
   });
 
-  router.get('/config', handler: (Request request) {
+  router.get('/config', handler: (Request request) async {
     print(request.container.make('@config.app.name'));
     return Response.Ok(request.container.make('@config.app.name'));
   });
 
-  router.get('/:name', handler: (Request request) {
+  router.get('/:name', handler: (Request request) async {
     return Response.Ok(request.pathParams['name']);
   });
 
