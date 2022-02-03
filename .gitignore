@@ -2,6 +2,8 @@
 .dart_tool/
 .packages
 
+docs/node_modules/
+
 # Conventional directory for build outputs
 build/
 
