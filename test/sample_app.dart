@@ -1,6 +1,6 @@
 import 'package:steward/app/app.dart';
 import 'package:steward/controllers/controller.dart';
-import 'package:steward/controllers/verbs.dart';
+import 'package:steward/controllers/route_utils.dart';
 import 'package:steward/router/router.dart';
 
 class SimpleController extends Controller {

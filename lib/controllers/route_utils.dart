@@ -45,6 +45,11 @@ class Options extends RouteBindingDecorator {
   const Options(String path) : super(path, HttpVerb.Options);
 }
 
+class Path {
+  final path;
+  const Path(String this.path);
+}
+
 final GetAnnotation = reflectClass(Get);
 final PutAnnotation = reflectClass(Put);
 final PostAnnotation = reflectClass(Post);
@@ -54,6 +59,7 @@ final TraceAnnotation = reflectClass(Trace);
 final HeadAnnotation = reflectClass(Head);
 final OptionsAnnotation = reflectClass(Options);
 final ConnectAnnotation = reflectClass(Connect);
+final PathAnnotation = reflectClass(Path);
 
 final allHttpVerbs = [
   GetAnnotation,
@@ -77,13 +83,22 @@ class PathControllerReflectiveBinding {
 
 List<PathControllerReflectiveBinding> getPaths(ClassMirror mirror) {
   final paths = <PathControllerReflectiveBinding>[];
+  var basePath = '';
+
+  // If the class has a @Path specified, we'll set it as the base
+  mirror.metadata.forEach((metadata) {
+    if (metadata.type == PathAnnotation) {
+      basePath = (metadata.reflectee as Path).path;
+    }
+  });
+
   mirror.declarations.forEach((key, value) {
     value.metadata.forEach((meta) {
       if (allHttpVerbs.contains(meta.type)) {
         // This is indeed a verb!
         final injectable = (meta.reflectee as RouteBindingDecorator);
         paths.add(PathControllerReflectiveBinding(
-            injectable.path, injectable.verb, value.simpleName));
+            basePath + injectable.path, injectable.verb, value.simpleName));
       }
     });
   });

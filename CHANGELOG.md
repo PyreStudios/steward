@@ -4,8 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
+
+## [0.0.8] - 2022-02-02
+### Added
+- Support for @Path decorator to be used on controllers.
+
+### Fixed
+- Steward's new command should now place dart files in the correct place
+
 ## [0.0.7]
 ### Added
 - Infer content type from response body if none is provided.

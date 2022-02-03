@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:steward/controllers/verbs.dart';
+import 'package:steward/controllers/route_utils.dart';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
@@ -9,6 +9,7 @@ class UserService {
   String gimme() => 'got it';
 }
 
+@Path('/cont')
 class Cont extends Controller {
   @Get('/')
   String get(_) => userService?.gimme() ?? 'no user service in container';
@@ -48,7 +49,7 @@ void main() {
 
     final client = HttpClient();
     final request =
-        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/cont/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first,
         equals('no user service in container'));
@@ -60,7 +61,7 @@ void main() {
 
     final client = HttpClient();
     final request =
-        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/cont/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('got it'));
   });

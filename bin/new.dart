@@ -128,16 +128,16 @@ class NewCommand extends Command {
     var config = File('./$name/config.yml');
     config.writeAsStringSync(configTemplate);
     var viewsDir = Directory('$name/views');
-    var controllersDir = Directory('$name/controllers');
+    var controllersDir = Directory('$name/lib/controllers');
     var assetsDir = Directory('$name/assets');
     viewsDir.createSync();
     controllersDir.createSync();
     assetsDir.createSync();
 
     // write initial files
-    File('$name/app.dart')
+    File('$name/lib/app.dart')
         .writeAsStringSync(appTemplate.replaceAll('{{{name}}}', name));
-    File('$name/controllers/sample_controller.dart')
+    File('$name/lib/controllers/sample_controller.dart')
         .writeAsStringSync(controllerTemplate);
     File('$name/views/main.mustache').writeAsStringSync(viewTemplate);
     Directory.current = Directory('./$name');
