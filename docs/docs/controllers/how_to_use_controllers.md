@@ -24,6 +24,9 @@ class SampleController extends Controller {
 
 The controller in this example is a SampleController that extends the Controller provided by Steward. Additionally, this controller specifies that a UserService should be injected from the DI container, a GET handler to '/version' that returns 'v1.0', a GET handler to '/show' that renders a view, and a GET handler to '/users' that gets data from the injected UserService. This probably isn't the best example of a real-life controller, but it showcases a lot of functionality.
 
+## A note on async
+Controller functions can be either sync or async! It's entirely up to you and Steward supports both!
+
 ## Annotations for HTTP Verbs
 
 TODO

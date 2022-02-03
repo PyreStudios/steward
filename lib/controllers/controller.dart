@@ -34,7 +34,7 @@ abstract class Controller {
   }
 }
 
-Response Function(Request request) controllerItemRouteHandler(
+Future<Response> Function(Request request) controllerItemRouteHandler(
     Type controllerType, Symbol methodName) {
   return (Request request) {
     final _controller =
@@ -42,9 +42,11 @@ Response Function(Request request) controllerItemRouteHandler(
     final result = _controller.invoke(methodName, [request]).reflectee;
     switch (result.runtimeType) {
       case Response:
+        return Future.value(result);
+      case Future<Response>:
         return result;
       default:
-        return Response(200, body: result);
+        return Future.value(Response(200, body: result));
     }
   };
 }

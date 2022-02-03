@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:steward/container/container.dart';
 
@@ -12,5 +13,9 @@ class Request {
     if (container != null) {
       this.container = container;
     }
+  }
+
+  Future<String> getBody() {
+    return utf8.decodeStream(request);
   }
 }

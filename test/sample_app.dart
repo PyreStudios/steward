@@ -12,11 +12,11 @@ class SimpleController extends Controller {
 
 Future main() async {
   var router = Router();
-  router.get('/hello', (Request request) {
+  router.get('/hello', (Request request) async {
     return Response.Ok('Hello World!');
   });
 
-  router.get('/config', (Request request) {
+  router.get('/config', (Request request) async {
     print(request.container);
     print(request.container.make('@config'));
     return Response.Ok(request.container.make('@config'));
@@ -24,7 +24,7 @@ Future main() async {
 
   router.mount(SimpleController);
 
-  router.get('/:name', (Request request) {
+  router.get('/:name', (Request request) async {
     return Response.Ok(request.pathParams['name']);
   });
 

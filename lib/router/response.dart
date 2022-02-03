@@ -58,8 +58,9 @@ class Response {
 
 /// writeResponse takes in an HTTP request and a steward response, and writes the
 /// contents of the steward response to the HTTP response.
-void writeResponse(HttpRequest request, Response response) {
+Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   // if we dont know what the content type is at this point, we infer it.
+  var response = await resp;
   if (response.headers.contentType == null) {
     var jsonRegex = RegExp('/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/');
     if (jsonRegex.hasMatch(response.body.toString())) {
@@ -85,4 +86,6 @@ void writeResponse(HttpRequest request, Response response) {
 
   request.response.statusCode = response.statusCode;
   request.response.write(response.body);
+
+  return;
 }

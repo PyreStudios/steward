@@ -8,9 +8,9 @@ MiddlewareFunc CorsMiddleware(
     {List<String>? allowOrigin,
     List<String>? allowMethods,
     List<String>? allowHeaders}) {
-  return (Response Function(Request) next) {
-    return (Request request) {
-      var resp = next(request);
+  return (Future<Response> Function(Request) next) {
+    return (Request request) async {
+      var resp = await next(request);
 
       if (allowOrigin != null) {
         resp.headers.add(_originKey, allowOrigin);

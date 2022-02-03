@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2022-02-2
+### Changed
+- Steward is now async based!
+
 ## [0.0.8] - 2022-02-02
 ### Added
 - Support for @Path decorator to be used on controllers.

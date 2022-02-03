@@ -7,5 +7,5 @@ import 'package:steward/router/response.dart';
 /// This might sound confusing, but the implementation for this middleware pattern
 /// is likely not as bad as you may think! Check out the documentation for more
 /// information.
-typedef MiddlewareFunc = Response Function(Request) Function(
-    Response Function(Request) nextHandler);
+typedef MiddlewareFunc = Future<Response> Function(Request) Function(
+    Future<Response> Function(Request) nextHandler);

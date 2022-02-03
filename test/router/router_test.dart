@@ -32,7 +32,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple GET requests', () async {
-    router.get('/', (_) {
+    router.get('/', (_) async {
       return Response.Ok('Success');
     });
 
@@ -67,7 +67,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple POST requests', () async {
-    router.post('/', (_) {
+    router.post('/', (_) async {
       return Response.Ok('Success');
     });
 
@@ -79,7 +79,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple PUT requests', () async {
-    router.put('/', (_) {
+    router.put('/', (_) async {
       return Response.Ok('Success');
     });
 
@@ -91,7 +91,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple DELETE requests', () async {
-    router.delete('/', (_) {
+    router.delete('/', (_) async {
       return Response.Ok('Success');
     });
 
@@ -103,7 +103,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple PATCH requests', () async {
-    router.patch('/', (_) {
+    router.patch('/', (_) async {
       return Response.Ok('Success');
     });
 
@@ -115,7 +115,7 @@ void main() {
   });
 
   test('Router responds appropriately to simple HEAD requests', () async {
-    router.head('/', (_) {
+    router.head('/', (_) async {
       return Response.Ok('Success');
     });
 
@@ -128,7 +128,7 @@ void main() {
 
   test('Router returns a response with a 404 error code when no match is found',
       () async {
-    router.get('/', (_) {
+    router.get('/', (_) async {
       return Response.Ok('Success');
     });
 
@@ -143,10 +143,10 @@ void main() {
       'Router should trigger binding-specific middleware on all matched requests',
       () async {
     var called = false;
-    router.get('/', (_) {
+    router.get('/', (_) async {
       return Response.Ok('Success');
     }, middleware: [
-      (Response Function(Request) next) {
+      (Future<Response> Function(Request) next) {
         called = true;
         return (Request request) {
           return next(request);
@@ -166,7 +166,7 @@ void main() {
       () async {
     var called = false;
     router.middleware = [
-      (Response Function(Request) next) {
+      (Future<Response> Function(Request) next) {
         called = true;
         return (Request request) {
           return next(request);

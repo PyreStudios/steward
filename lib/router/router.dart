@@ -13,10 +13,10 @@ export 'package:steward/router/response.dart';
 export 'package:steward/router/request.dart';
 
 enum HttpVerb { Connect, Delete, Get, Head, Options, Patch, Post, Put, Trace }
-typedef RequestCallback = Response Function(Request request);
+typedef RequestCallback = Future<Response> Function(Request request);
 
 abstract class Processable {
-  Response process(Request request);
+  Future<Response> process(Request request);
 }
 
 abstract class RouteBinding implements Processable {
@@ -39,7 +39,7 @@ class _FunctionBinding extends RouteBinding {
       : super(verb: verb, path: path, middleware: middleware);
 
   @override
-  Response process(Request request) {
+  Future<Response> process(Request request) {
     return callback(request);
   }
 }
@@ -144,12 +144,12 @@ class Router {
             var allMiddlewares = [...middleware, ...bindings[i].middleware];
 
             var handler = bindings[i].process;
-            allMiddlewares.forEach((element) {
+            allMiddlewares.forEach((element) async {
               handler = element(handler);
             });
 
             var response = handler(req);
-            writeResponse(request, response);
+            await writeResponse(request, response);
             break;
           }
         }
@@ -158,13 +158,13 @@ class Router {
       if (!hasMatch) {
         // TODO: We can clean this up a bit
         var allMiddlewares = [...middleware];
-        var handler = (Request req) => Response.NotFound();
+        var handler = (Request req) => Future.value(Response.NotFound());
         allMiddlewares.forEach((element) {
           handler = element(handler);
         });
 
         var response = handler(Request(request: request));
-        writeResponse(request, response);
+        await writeResponse(request, response);
       }
 
       await request.response.close();
