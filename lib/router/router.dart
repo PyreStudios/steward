@@ -49,6 +49,9 @@ class Router {
   List<RouteBinding> bindings = [];
   List<MiddlewareFunc> middleware = [];
   HttpServer? server;
+  dynamic address = InternetAddress.ANY_IP_V4;
+
+  Router({this.address});
 
   void setDIContainer(Container container) {
     this.container = container;
