@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2022-02-10
+### Changed
+- Added support for passing in a host to the router, default to AnyIPv4
+
 ## [0.1.0] - 2022-02-2
 ### Changed
 - Steward is now async based!
