@@ -27,14 +27,14 @@ class GoodForm extends Form {
 
 void main() {
   group('Form tests', () {
-    test('should bind and resolve properly', () {
+    test('should handle validation errors', () {
       var form = BadForm();
       expect(form.validate().isNotEmpty, true);
       expect(form.validate()[0].message, '1 != 2');
       expect(form.isValid, false);
     });
 
-    test('should bind and resolve properly', () {
+    test('should handle no validation errors', () {
       var form = GoodForm();
       expect(form.validate().isEmpty, true);
       expect(form.isValid, true);
