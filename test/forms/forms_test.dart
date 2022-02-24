@@ -2,8 +2,7 @@ import 'package:test/test.dart';
 import 'package:steward/steward.dart';
 
 class BadForm extends Form {
-  @override
-  List<FormError> validator() {
+  BadForm(): super((form) {
     List<FormError> errors = [];
 
     if (1 != 2) {
@@ -11,20 +10,19 @@ class BadForm extends Form {
     }
 
     return errors;
-  }
+  });
 }
 
 class GoodForm extends Form {
-  @override
-  List<FormError> validator() {
+  GoodForm(): super((form) {
     List<FormError> errors = [];
 
     if (1 != 1) {
-      errors.add(FormError('this should really never happen'));
+      errors.add(FormError('this should never happen'));
     }
 
     return errors;
-  }
+  });
 }
 
 void main() {

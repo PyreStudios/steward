@@ -4,25 +4,21 @@ class FormError {
   FormError(this.message);
 }
 
+class Form {
+  final List<FormError> Function(Form) _validator;
+  bool _isValid = false;
 
-/// Validatable is an abstract class that allows us to validate
-/// implementers of the class. Additionally, we can query the validity of that form.
-abstract class Validatable {
-  List<FormError> validator();
-  bool isValid = false;
-}
+  Form(this._validator);
 
-abstract class Form<T> extends Validatable {
-  @override
-  List<FormError> validator();
+  bool get isValid => _isValid;
 
   List<FormError> validate() {
-    var errors = validator();
+    var errors = _validator(this);
 
     if (errors.isNotEmpty) {
-      isValid = false;
+      _isValid = false;
     } else {
-      isValid = true;
+      _isValid = true;
     }
 
     return errors;
