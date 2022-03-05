@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2022-03-05
+### Fixed
+- Resolved an issue that was preventing Futures of Futures (and so on) from serializing properly
+
 ## [0.1.1] - 2022-02-10
 ### Changed
 - Added support for passing in a host to the router, default to AnyIPv4
