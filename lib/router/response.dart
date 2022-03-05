@@ -64,15 +64,22 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   var response = await resp;
   var body = await response.body;
   var jsonBody = jsonEncode(body);
+  var jsonRegex = RegExp('/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/');
+  var bodyIsJsonable = jsonRegex.hasMatch(jsonBody);
+
   if (response.headers.contentType == null) {
-    var jsonRegex = RegExp('/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/');
-    if (jsonRegex.hasMatch(jsonBody)) {
+    if (bodyIsJsonable) {
       response.headers.contentType = ContentType.json;
-      body = jsonBody;
     } else {
       response.headers.contentType = ContentType.text;
     }
   }
+
+  // If this _SHOULD_ be JSON and the body can be converted to JSON, do it!
+  if (response.headers.contentType == ContentType.json && bodyIsJsonable) {
+    body = jsonBody;
+  }
+
   request.response.headers.contentType = response.headers.contentType;
   request.response.headers.date = response.headers.date;
 
