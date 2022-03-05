@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 const _originKey = 'Access-Control-Allow-Origin';
 const _methodsKey = 'Access-Control-Allow-Methods';
@@ -61,10 +62,13 @@ class Response {
 Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   // if we dont know what the content type is at this point, we infer it.
   var response = await resp;
+  var body = await response.body;
+  var jsonBody = jsonEncode(body);
   if (response.headers.contentType == null) {
     var jsonRegex = RegExp('/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/');
-    if (jsonRegex.hasMatch(response.body.toString())) {
+    if (jsonRegex.hasMatch(jsonBody)) {
       response.headers.contentType = ContentType.json;
+      body = jsonBody;
     } else {
       response.headers.contentType = ContentType.text;
     }
@@ -85,7 +89,7 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   }
 
   request.response.statusCode = response.statusCode;
-  request.response.write(response.body);
+  request.response.write(await response.body);
 
   return;
 }
