@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2022-03-05
+### Fixed
+- Resolved an issue that was preventing the previous change from running. My bad.
+
 ## [0.1.2] - 2022-03-05
 ### Fixed
 - Resolved an issue that was preventing Futures of Futures (and so on) from serializing properly

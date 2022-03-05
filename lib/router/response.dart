@@ -89,7 +89,7 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   }
 
   request.response.statusCode = response.statusCode;
-  request.response.write(await response.body);
+  request.response.write(body);
 
   return;
 }
