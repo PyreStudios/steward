@@ -64,8 +64,7 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   var response = await resp;
   var body = await response.body;
   var jsonBody = jsonEncode(body);
-  var jsonRegex = RegExp('/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/');
-  var bodyIsJsonable = jsonRegex.hasMatch(jsonBody);
+  var bodyIsJsonable = jsonBody != body;
 
   if (response.headers.contentType == null) {
     if (bodyIsJsonable) {
