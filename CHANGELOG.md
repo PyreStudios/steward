@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Dont try to JSONify primitives on their own.
+- Catch errors at the framework layer and dont crash the server)
+    - There's a lot of further improvement to be made here. See https://github.com/PyreStudios/steward/issues/16 for more information.
 
 ## [0.1.5] - 2022-03-05
 ### Fixed

@@ -200,4 +200,18 @@ void main() {
     await request.close();
     expect(called, true);
   });
+
+  test('Router still responds when an exception is raised', () async {
+    router.post('/', (_) async {
+      throw Exception('OH NO');
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(response.statusCode, equals(500));
+    expect(await response.transform(utf8.decoder).first,
+        contains('Exception: OH NO'));
+  });
 }

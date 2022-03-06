@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:mirrors';
 
 import 'package:steward/container/container.dart';
@@ -146,13 +147,22 @@ class Router {
 
             var allMiddlewares = [...middleware, ...bindings[i].middleware];
 
-            var handler = bindings[i].process;
-            allMiddlewares.forEach((element) async {
-              handler = element(handler);
-            });
+            try {
+              var handler = bindings[i].process;
+              allMiddlewares.forEach((element) async {
+                handler = element(handler);
+              });
 
-            var response = handler(req);
-            await writeResponse(request, response);
+              var response = handler(req);
+              await writeResponse(request, response);
+            } catch (err, stacktrace) {
+              await writeResponse(request, Future.value(Response.Boom('''
+Something went wrong.
+${err.toString()}
+
+${stacktrace.toString()}
+''')));
+            }
             break;
           }
         }
