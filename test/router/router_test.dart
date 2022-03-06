@@ -9,6 +9,12 @@ class UserService {
   String gimme() => 'got it';
 }
 
+class ComplexResponseBody {
+  String content = 'Hello';
+
+  toJson() => {'content': content};
+}
+
 @Path('/cont')
 class Cont extends Controller {
   @Get('/')
@@ -76,6 +82,20 @@ void main() {
         await client.post(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
+  });
+
+  test('Router responds appropriately to get requests with object bodies',
+      () async {
+    router.post('/', (_) async {
+      return Response.Ok(ComplexResponseBody());
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first,
+        equals('{"content":"Hello"}'));
   });
 
   test('Router responds appropriately to simple PUT requests', () async {
