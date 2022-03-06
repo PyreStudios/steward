@@ -75,7 +75,9 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   }
 
   // If this _SHOULD_ be JSON and the body can be converted to JSON, do it!
-  if (response.headers.contentType == ContentType.json && bodyIsJsonable) {
+  if (response.headers.contentType == ContentType.json &&
+      bodyIsJsonable &&
+      !(body is int || body is double || body is String || body == null)) {
     body = jsonBody;
   }
 
