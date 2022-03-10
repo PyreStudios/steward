@@ -232,9 +232,27 @@ void main() {
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/');
     final response2 = await request2.close();
     expect(counter, equals(2));
-    final reques32 =
+    final request3 =
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/hat');
-    final response3 = await request2.close();
+    final response3 = await request3.close();
+    expect(counter, equals(2));
+  });
+
+  test('Router supports case insensitive matching', () async {
+    var counter = 0;
+    router.post('/nice', (_) async {
+      counter++;
+      return Response.Ok();
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice');
+    final response = await request.close();
+    expect(counter, equals(1));
+    final request2 =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/NICE');
+    final response2 = await request2.close();
     expect(counter, equals(2));
   });
 }

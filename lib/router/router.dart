@@ -140,8 +140,9 @@ class Router {
             pathToRegExp(bindings[i].path, parameters: params).pattern;
         // Build a new regex by removing the $, adding in the optional trailing slash
         // and then adding the end terminator back on ($).
-        var regex =
-            RegExp('${rootPattern.substring(0, rootPattern.length - 1)}\\/?\$');
+        var regex = RegExp(
+            '${rootPattern.substring(0, rootPattern.length - 1)}\\/?\$',
+            caseSensitive: false);
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {

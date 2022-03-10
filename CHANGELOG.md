@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Support for optional trailing slash support in router matching.
+- Support for case insensitive pattern matching for router matching.
+
+### Changed
+- Bump version of Bosun dependency.
 
 ## [0.1.6] - 2022-03-06
 ### Fixed
