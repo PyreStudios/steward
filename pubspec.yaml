@@ -1,6 +1,6 @@
 name: steward
 description: Steward is a CLI and Framework for building expressive web servers in Dart.
-version: 0.1.6
+version: 0.1.7
 repository: https://www.github.com/pyrestudios/steward
 
 environment:
