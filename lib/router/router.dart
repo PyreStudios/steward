@@ -134,7 +134,14 @@ class Router {
       var hasMatch = false;
       for (var i = 0; i < bindings.length; i++) {
         var params = <String>[];
-        var regex = pathToRegExp(bindings[i].path, parameters: params);
+
+        // Get the root pattern from the pathToRegex call
+        var rootPattern =
+            pathToRegExp(bindings[i].path, parameters: params).pattern;
+        // Build a new regex by removing the $, adding in the optional trailing slash
+        // and then adding the end terminator back on ($).
+        var regex =
+            RegExp('${rootPattern.substring(0, rootPattern.length - 1)}\\/?\$');
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {

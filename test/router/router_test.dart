@@ -214,4 +214,27 @@ void main() {
     expect(await response.transform(utf8.decoder).first,
         contains('Exception: OH NO'));
   });
+
+  test('Router supports trailing slash as well as not trailing slash',
+      () async {
+    var counter = 0;
+    router.post('/nice', (_) async {
+      counter++;
+      return Response.Ok();
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice');
+    final response = await request.close();
+    expect(counter, equals(1));
+    final request2 =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/');
+    final response2 = await request2.close();
+    expect(counter, equals(2));
+    final reques32 =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/hat');
+    final response3 = await request2.close();
+    expect(counter, equals(2));
+  });
 }
