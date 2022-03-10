@@ -42,7 +42,7 @@ packages:
       name: bosun
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.0"
+    version: "0.2.0"
   charcode:
     dependency: transitive
     description:
@@ -316,6 +316,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.19"
+  tree_iterator:
+    dependency: transitive
+    description:
+      name: tree_iterator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
