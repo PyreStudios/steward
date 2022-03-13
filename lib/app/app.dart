@@ -7,19 +7,27 @@ import 'package:steward/config/config_reader.dart';
 
 class AppConfigurationException implements Exception {}
 
+enum Environment { production, other }
+
 class App {
   Router router;
+  Environment environment;
   late Container _container;
 
-  App({required this.router}) {
+  App({required this.router, this.environment = Environment.other}) {
     _container = router.container;
   }
 
   Future start() async {
     _loadConfigIntoContainer();
     _loadViewsIntoContainer();
+    _bindEnvironmentIntoContainer();
 
     return await router.serveHTTP();
+  }
+
+  void _bindEnvironmentIntoContainer() {
+    _container.bind('@environment', (_) => environment);
   }
 
   /// Loads and parses the config file, then flattens the config map

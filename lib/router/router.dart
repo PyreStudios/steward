@@ -9,6 +9,7 @@ import 'package:steward/middleware/middleware.dart';
 import 'package:steward/router/response.dart';
 import 'package:steward/router/request.dart';
 import 'package:path_to_regexp/path_to_regexp.dart';
+import 'package:steward/steward.dart';
 
 export 'package:steward/router/response.dart';
 export 'package:steward/router/request.dart';
@@ -164,12 +165,7 @@ class Router {
               var response = handler(req);
               await writeResponse(request, response);
             } catch (err, stacktrace) {
-              await writeResponse(request, Future.value(Response.Boom('''
-Something went wrong.
-${err.toString()}
-
-${stacktrace.toString()}
-''')));
+              await writeErrorResponse(request, err, stacktrace);
             }
             break;
           }
@@ -189,6 +185,20 @@ ${stacktrace.toString()}
       }
 
       await request.response.close();
+    }
+  }
+
+  Future<void> writeErrorResponse(request, err, stacktrace) async {
+    if (container.make('@environment') == Environment.production) {
+      // if things are production, we need to treat this all differently.
+      return await writeResponse(request, Future.value(Response.Boom()));
+    } else {
+      return await writeResponse(request, Future.value(Response.Boom('''
+Something went wrong.
+${err.toString()}
+
+${stacktrace.toString()}
+''')));
     }
   }
 }
