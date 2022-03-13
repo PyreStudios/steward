@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Support for the app to take in an environment variable which is used to help determine if stacktraces should be written via HTTP when failures are caught. The plan is to ultimately incorporate this into more functionality in the future.
+
 ## [0.1.7] - 2022-03-09
 ### Added
 - Support for optional trailing slash support in router matching.
