@@ -81,7 +81,7 @@ import 'package:{{{name}}}/controllers/sample_controller.dart';
 
 Future main() async {
   var router = Router();
-  router.get('/', controller: SimpleController(), method:'home');
+  router.mount(SimpleController);
   router.get('/hello', handler: (Request request) async {
     return Response.Ok('Hello World!');
   });
@@ -106,6 +106,7 @@ Future main() async {
 
 var controllerTemplate = '''import 'package:steward/steward.dart';
 class SimpleController extends Controller {
+  @Get('/home')
   Response home(Request request) {
     return view('main');
   }
