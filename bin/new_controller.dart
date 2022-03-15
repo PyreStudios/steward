@@ -4,6 +4,8 @@ import 'package:bosun/bosun.dart';
 import 'package:recase/recase.dart';
 
 var controllerTemplate = '''import 'package:steward/steward.dart';
+import 'package:steward/controllers/route_utils.dart';
+
 class {{{name}}} extends Controller {
   @Get('/home')
   Response home(Request request) {

@@ -106,6 +106,8 @@ Future main() async {
 ''';
 
 var controllerTemplate = '''import 'package:steward/steward.dart';
+import 'package:steward/controllers/route_utils.dart';
+
 class SimpleController extends Controller {
   @Get('/home')
   Response home(Request request) {
@@ -126,16 +128,17 @@ class NewCommand extends Command {
   void run(List<String> args, Map<String, dynamic> flags) {
     var name = args[0];
 
-    Process.runSync('dart', ['create', name, '--template', 'console-simple']);
+    Process.runSync('dart', ['create', name, '--template', 'console-full']);
 
     var config = File('./$name/config.yml');
     config.writeAsStringSync(configTemplate);
-    var viewsDir = Directory('$name/views');
-    var controllersDir = Directory('$name/lib/controllers');
-    var assetsDir = Directory('$name/assets');
-    viewsDir.createSync();
-    controllersDir.createSync();
-    assetsDir.createSync();
+    Directory('./$name/views').createSync();
+    Directory('./$name/lib/controllers').createSync();
+    Directory('./$name/assets').createSync();
+
+    // remove generated files from dart tool
+    File('$name/lib/$name.dart').deleteSync();
+    File('$name/test/${name}_test.dart').deleteSync();
 
     // write initial files
     File('$name/lib/app.dart')

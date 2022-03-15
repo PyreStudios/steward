@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Support for the app to take in an environment variable which is used to help determine if stacktraces should be written via HTTP when failures are caught. The plan is to ultimately incorporate this into more functionality in the future.
+- Steward CLI support for `steward doctor`
+- Steward CLI support for `steward new controller $controllerName`
+
+### Fixed
+- Steward CLI support for up-to-date steward app generation.
 
 ## [0.1.7] - 2022-03-09
 ### Added
