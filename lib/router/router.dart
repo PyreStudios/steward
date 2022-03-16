@@ -152,7 +152,7 @@ class Router {
           if (match != null) {
             var pathParams = extract(params, match);
             var req = Request(request: request, pathParams: pathParams)
-              ..setContainer(container);
+              ..setContainer(container.clone());
 
             var allMiddlewares = [...middleware, ...bindings[i].middleware];
 

@@ -4,12 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [UNRELEASED]
 
+## [0.2.0] - 2022-03-15
 ### Added
 - Support for the app to take in an environment variable which is used to help determine if stacktraces should be written via HTTP when failures are caught. The plan is to ultimately incorporate this into more functionality in the future.
 - Steward CLI support for `steward doctor`
 - Steward CLI support for `steward new controller $controllerName`
+- Support for `dart pub global activate steward`
+
+### Changed
+- The Container abstract class now has an abstract method called Clone. Containers must implement clone to be used by Steward.
+- The container made available to a request is cloned right before we start processing middleware and/or the request handler. This should allow users to bind request specific details via middleware and expose those in the handler should they choose to do so.
 
 ### Fixed
 - Steward CLI support for up-to-date steward app generation.
