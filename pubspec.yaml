@@ -6,6 +6,9 @@ repository: https://www.github.com/pyrestudios/steward
 environment:
   sdk: '>=2.15.0 <3.0.0'
 
+executables:
+  steward:
+
 dependencies:
 #  path: ^1.7.0
   path_to_regexp: ^0.4.0

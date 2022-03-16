@@ -8,8 +8,9 @@ Steward's goal is to be a helpful framework for building server-side experiences
 
 ## Steward's Parts
 
-Steward is comprised of four main parts.
+Steward is comprised of five main parts.
 
+- The CLI
 - The Router
 - The Container
 - Controllers
