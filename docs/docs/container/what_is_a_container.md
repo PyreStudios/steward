@@ -57,7 +57,7 @@ class UserService {
 
 var container = CacheContainer();
 container.bind<UserService>(UserService.Key, (Container container) {
-  return UserService(1);
+  return UserService('1');
 });
 
 container.make<UserService>(UserService.Key).loggedInID;
