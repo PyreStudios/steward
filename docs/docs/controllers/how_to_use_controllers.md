@@ -27,10 +27,30 @@ The controller in this example is a SampleController that extends the Controller
 ## A note on async
 Controller functions can be either sync or async! It's entirely up to you and Steward supports both!
 
+Controller methods can be set up to return a Response or a Future<Response>. Generally, most controller methods tend to become async over time and for that reason, we encourage using async as a default but if you find that its overly complicating something (say returning a static string to indicate a healthcheck or a version number perhaps).
+
+
+
 ## Annotations for HTTP Verbs
 
-TODO
+Controllers are reflectively mounted using annotations. Specifically, Steward provides a list of HTTP verbs as annotations that can be used to decorate method handlers. Note: Mounting a controller to your router without any HTTP Verb annotations will generate no routes.
 
 ## The View function
 
-TODO
+The view function is provided by the Controller class. It can be used to generate a response with an HTML body from one of the mustache templates in your views directory.
+
+Assuming we have a view in a file called `all_records`, we could write:
+
+```dart
+class MyController extends Controller {
+
+  @Get('/index')
+  Response showItems() {
+    // any variables needed by the template can be passed in to varMap.
+    return view('all_records', varMap: {
+      'name': 'Steward'
+    });
+  }
+}
+
+```
