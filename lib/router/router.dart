@@ -51,7 +51,7 @@ class Router {
   List<RouteBinding> bindings = [];
   List<MiddlewareFunc> middleware = [];
   HttpServer? server;
-  dynamic address = InternetAddress.ANY_IP_V4;
+  dynamic address = InternetAddress.anyIPv4;
 
   Router({this.address});
 
@@ -67,7 +67,7 @@ class Router {
           verb: element.verb,
           path: element.path,
           callback: controllerItemRouteHandler(controllerType, element.method),
-          middleware: middleware));
+          middleware: element.middlewares));
     });
   }
 

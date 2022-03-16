@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.2.1] - 2022-03-16
+### Added
+- Support for Controller Method level Middleware. More below.
+
+Controller Method-level middleware can be specified by passing an optional list of middleware to the annotation for controller method decorations.
+
 ## [0.2.0] - 2022-03-15
 ### Added
 - Support for the app to take in an environment variable which is used to help determine if stacktraces should be written via HTTP when failures are caught. The plan is to ultimately incorporate this into more functionality in the future.

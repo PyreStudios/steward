@@ -34,6 +34,27 @@ Controller methods can be set up to return a `Response` or a `Future<Response>`.
 
 Controllers are reflectively mounted using annotations. Specifically, Steward provides a list of HTTP verbs as annotations that can be used to decorate method handlers. Note: Mounting a controller to your router without any HTTP Verb annotations will generate no routes.
 
+These annotations also take in an optional list of middleware to run against that method. A great example might be to guard specific routes with authentication middleware. To do so at the controller level, we can modify our above example like so:
+
+```dart
+class SampleController extends Controller {
+  @Injectable('UserService')
+  late UserService userService;
+  
+  @Get('/version')
+  version(_) => 'v1.0';
+
+  @Get('/show', [userHasAccessMiddleware])
+  Response show(Request request) => view('main_template');
+  
+  @Get('/users', [userHasAccessMiddleware])
+  Response users => UserService.getUsers();
+}
+```
+
+This assumes that you have a middleware named `userHasAccessMiddleware` in scope of this file. You'll want to substitute the name of your own middleware instead of using that one.
+
+
 ## The View function
 
 The view function is provided by the Controller class. It can be used to generate a response with an HTML body from one of the mustache templates in your views directory.
