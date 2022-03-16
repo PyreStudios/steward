@@ -27,8 +27,7 @@ The controller in this example is a SampleController that extends the Controller
 ## A note on async
 Controller functions can be either sync or async! It's entirely up to you and Steward supports both!
 
-Controller methods can be set up to return a Response or a Future<Response>. Generally, most controller methods tend to become async over time and for that reason, we encourage using async as a default but if you find that its overly complicating something (say returning a static string to indicate a healthcheck or a version number perhaps).
-
+Controller methods can be set up to return a `Response` or a `Future<Response>`. Generally, most controller methods tend to become async over time and for that reason, we encourage using async as a default but if you find that its overly complicating something (say returning a static string to indicate a healthcheck or a version number perhaps).
 
 
 ## Annotations for HTTP Verbs
