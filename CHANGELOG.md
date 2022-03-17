@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.2.2] - 2022-03-17
+### Fixed
+- Middlewares were being called from right to left in declararation order and this was causing a lot of confusion (and wasnt intended). This is now fixed.
+
 ## [0.2.1] - 2022-03-16
 ### Added
 - Support for Controller Method level Middleware. More below.

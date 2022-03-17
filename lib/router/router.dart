@@ -154,7 +154,10 @@ class Router {
             var req = Request(request: request, pathParams: pathParams)
               ..setContainer(container.clone());
 
-            var allMiddlewares = [...middleware, ...bindings[i].middleware];
+            var allMiddlewares = [
+              ...middleware.reversed,
+              ...bindings[i].middleware.reversed
+            ];
 
             try {
               var handler = bindings[i].process;
@@ -174,7 +177,7 @@ class Router {
 
       if (!hasMatch) {
         // TODO: We can clean this up a bit
-        var allMiddlewares = [...middleware];
+        var allMiddlewares = [...middleware.reversed];
         var handler = (Request req) => Future.value(Response.NotFound());
         allMiddlewares.forEach((element) {
           handler = element(handler);
