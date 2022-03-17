@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
-## [0.2.2] - 2022-03-17
+# [0.2.3] - 2022-03-16
+### Fixed
+- Route specific middlewares were being called before router specific middlewares. This is no longer the case.
+## [0.2.2] - 2022-03-16
 ### Fixed
 - Middlewares were being called from right to left in declararation order and this was causing a lot of confusion (and wasnt intended). This is now fixed.
 

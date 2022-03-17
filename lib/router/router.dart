@@ -155,8 +155,8 @@ class Router {
               ..setContainer(container.clone());
 
             var allMiddlewares = [
+              ...bindings[i].middleware.reversed,
               ...middleware.reversed,
-              ...bindings[i].middleware.reversed
             ];
 
             try {
