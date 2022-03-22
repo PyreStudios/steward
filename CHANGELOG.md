@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.2.4] - 2022-03-21
+### Fixed
+- Resolved an issue where if a path was defined with a trailing slash, the trailing slash was required. This was particularly problematic with combinations of the @Path and @GET (or other) decorators.
+
 # [0.2.3] - 2022-03-16
 ### Fixed
 - Route specific middlewares were being called before router specific middlewares. This is no longer the case.

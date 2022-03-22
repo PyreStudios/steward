@@ -47,4 +47,15 @@ void main() {
     expect(await response.transform(utf8.decoder).first, equals(Cont.body));
     expect(middlewareWasCalled, isTrue);
   });
+
+  test('Trailing slash should not be required on a / path', () async {
+    router.mount(Cont);
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/cont');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first, equals(Cont.body));
+  });
+ 
 }

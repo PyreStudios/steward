@@ -1,13 +1,8 @@
 import 'dart:io';
-import 'dart:math';
 import 'dart:mirrors';
 
-import 'package:steward/container/container.dart';
 import 'package:steward/controllers/controller.dart';
 import 'package:steward/controllers/route_utils.dart';
-import 'package:steward/middleware/middleware.dart';
-import 'package:steward/router/response.dart';
-import 'package:steward/router/request.dart';
 import 'package:path_to_regexp/path_to_regexp.dart';
 import 'package:steward/steward.dart';
 
@@ -141,9 +136,13 @@ class Router {
             pathToRegExp(bindings[i].path, parameters: params).pattern;
         // Build a new regex by removing the $, adding in the optional trailing slash
         // and then adding the end terminator back on ($).
-        var regex = RegExp(
-            '${rootPattern.substring(0, rootPattern.length - 1)}\\/?\$',
-            caseSensitive: false);
+        var cleanedPattern = rootPattern.substring(0, rootPattern.length - 1);
+        // account for the path already ending in slash
+        if (cleanedPattern.endsWith('/')) {
+          cleanedPattern =
+              cleanedPattern.substring(0, cleanedPattern.length - 1);
+        }
+        var regex = RegExp('$cleanedPattern\\/?\$', caseSensitive: false);
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {
