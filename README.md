@@ -10,7 +10,7 @@
 [![pub version](https://img.shields.io/pub/v/steward)](https://img.shields.io/pub/v/steward)
 [![codecov](https://codecov.io/gh/PyreStudios/steward/branch/main/graph/badge.svg?token=CAK5MR60ZI)](https://codecov.io/gh/PyreStudios/steward)
 [![points](https://img.shields.io/pub/points/steward)](https://img.shields.io/pub/points/steward)
-[![likes](https://img.shields.io/pub/points/steward)](https://img.shields.io/pub/points/steward)
+[![likes](https://img.shields.io/github/stars/pyrestudios/steward)](https://img.shields.io/github/stars/pyrestudios/steward)
 
 
 Full-fledged docs live here (WIP but still very useful at this point): [https://pyrestudios.github.io/steward](https://pyrestudios.github.io/steward).
