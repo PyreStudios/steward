@@ -11,6 +11,7 @@
 [![codecov](https://codecov.io/gh/PyreStudios/steward/branch/main/graph/badge.svg?token=CAK5MR60ZI)](https://codecov.io/gh/PyreStudios/steward)
 [![points](https://img.shields.io/pub/points/steward)](https://img.shields.io/pub/points/steward)
 [![likes](https://img.shields.io/github/stars/pyrestudios/steward)](https://img.shields.io/github/stars/pyrestudios/steward)
+[![build status](https://img.shields.io/github/checks-status/pyrestudios/steward/main?label=main%20build)](https://img.shields.io/github/checks-status/pyrestudios/steward/main?label=main%20build)
 
 
 Full-fledged docs live here (WIP but still very useful at this point): [https://pyrestudios.github.io/steward](https://pyrestudios.github.io/steward).
