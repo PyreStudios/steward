@@ -23,7 +23,7 @@ jobs:
     - name: Install coverage tools
       run: dart pub global activate coverage
     - name: format coverage
-      run: $HOME/.pub-cache/bin/format_coverage --lcov --in=coverage --out=coverage.lcov --packages=.packages --report-on=lib
+      run: $HOME/.pub-cache/bin/format_coverage --lcov --in=coverage --out=coverage.lcov --report-on=lib
     - uses: codecov/codecov-action@v2
       with:
         files: coverage.lcov
