@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [UNRELEASED]
 
+## [0.2.5.] - 2022-05-27
+### Fixed
+- Resolved an issue where loopback was being used vs AnyIPvX and prevented use from docker containers.
+
 ## [0.2.4] - 2022-03-21
 ### Fixed
 - Resolved an issue where if a path was defined with a trailing slash, the trailing slash was required. This was particularly problematic with combinations of the @Path and @GET (or other) decorators.

@@ -120,7 +120,7 @@ class Router {
   Future serveHTTP() async {
     var port = container.make('@config.app.port') ?? 4040;
     server = await HttpServer.bind(
-      InternetAddress.loopbackIPv4,
+      InternetAddress.anyIPv6,
       port,
     );
 
