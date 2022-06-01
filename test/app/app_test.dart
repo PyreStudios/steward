@@ -24,18 +24,15 @@ void main() {
       expect(() async => await app.start(), throwsException);
     });
 
-    // test('binds the environment into the application', () async {
-    //   final container = CacheContainer();
-    //   final mockRouter = MockRouter(container: container);
-
-    //   // when(mockRouter.serveHTTP()).thenAnswer((_) => Future.value(''));
-    //   // when(mockRouter.container).thenReturn(container);
-
-    //   final app = App(router: mockRouter);
-
-    //   await app.start();
-
-    //   expect(container.make<Environment>('@environment'), Environment.other);
-    // });
+    test('binds the environment into the application', () async {
+      final container = CacheContainer();
+      final mockRouter = MockRouter(container: container);
+      try {
+        // this blows up because the config file is missing
+        final app = App(router: mockRouter);
+        await app.start();
+      } catch (_) {}
+      expect(container.make<Environment>('@environment'), Environment.other);
+    });
   });
 }

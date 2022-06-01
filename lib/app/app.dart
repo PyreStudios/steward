@@ -19,9 +19,9 @@ class App {
   }
 
   Future start() async {
+    _bindEnvironmentIntoContainer();
     _loadConfigIntoContainer();
     _loadViewsIntoContainer();
-    _bindEnvironmentIntoContainer();
 
     return await router.serveHTTP();
   }
