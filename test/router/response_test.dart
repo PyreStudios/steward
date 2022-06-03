@@ -1,7 +1,143 @@
+import 'dart:io';
+
+import 'package:mockito/mockito.dart';
 import 'package:steward/router/response.dart';
 import 'package:test/test.dart';
 
+class FakeHttpHeaders extends Fake implements HttpHeaders {
+  ContentType? _contentType;
+  DateTime? _date;
+  Map<String, dynamic> _headers = {};
+
+  @override
+  DateTime? get date => _date;
+
+  @override
+  set date(DateTime? _date) {
+    this._date = _date;
+  }
+
+  @override
+  ContentType? get contentType => _contentType;
+
+  @override
+  set contentType(ContentType? _contentType) {
+    this._contentType = _contentType;
+  }
+
+  @override
+  void set(String name, Object value, {bool preserveHeaderCase = false}) {
+    _headers['name'] = value;
+  }
+
+  @override
+  List<String> operator [](String name) {
+    return _headers[name];
+  }
+}
+
+class FakeHttpResponse extends Fake implements HttpResponse {
+  int _statusCode = 200;
+  FakeHttpHeaders _headers = FakeHttpHeaders();
+  dynamic body;
+
+  @override
+  HttpHeaders get headers => _headers;
+
+  @override
+  int get statusCode => _statusCode;
+
+  @override
+  set statusCode(int _statusCode) {
+    this._statusCode = statusCode;
+  }
+
+  @override
+  void write(Object? object) {
+    body = object;
+  }
+}
+
+class FakeHttpRequest extends Fake implements HttpRequest {
+  FakeHttpResponse _response = FakeHttpResponse();
+  @override
+  HttpResponse get response => _response;
+}
+
 void main() {
+  group('Response', () {
+    group('Named constructors', () {
+      test('Ok', () {
+        final response = Response.Ok('Hello world!');
+        expect(response.statusCode, HttpStatus.ok);
+        expect(response.body, equals('Hello world!'));
+      });
+
+      test('Created', () {
+        final response = Response.Created('Hello world!');
+        expect(response.statusCode, HttpStatus.created);
+        expect(response.body, equals('Hello world!'));
+      });
+
+      test('BadRequest', () {
+        final response = Response.BadRequest('Hello world!');
+        expect(response.statusCode, HttpStatus.badRequest);
+        expect(response.body, equals('Hello world!'));
+      });
+
+      test('Unauthorized', () {
+        final response = Response.Unauthorized('Hello world!');
+        expect(response.statusCode, HttpStatus.unauthorized);
+        expect(response.body, equals('Hello world!'));
+      });
+
+      test('Forbidden', () {
+        final response = Response.Forbidden('Hello world!');
+        expect(response.statusCode, HttpStatus.forbidden);
+        expect(response.body, equals('Hello world!'));
+      });
+
+      test('NotFound', () {
+        final response = Response.NotFound('Hello world!');
+        expect(response.statusCode, HttpStatus.notFound);
+        expect(response.body, equals('Hello world!'));
+      });
+
+      test('InternalServerError', () {
+        final response = Response.InternalServerError('Hello world!');
+        expect(response.statusCode, HttpStatus.internalServerError);
+        expect(response.body, equals('Hello world!'));
+      });
+
+      test('Boom', () {
+        final response = Response.Boom('Hello world!');
+        expect(response.statusCode, HttpStatus.internalServerError);
+        expect(response.body, equals('Hello world!'));
+      });
+    });
+    group('Write response', () {
+      group('sets content type', () {
+        test('when body is json-able', () async {
+          final response = Response.Ok([]);
+          final httpReq = FakeHttpRequest();
+          await writeResponse(httpReq, Future.value(response));
+          expect(
+              httpReq.response.headers.contentType, equals(ContentType.json));
+          expect((httpReq.response as FakeHttpResponse).body, equals('[]'));
+        });
+
+        test('when body is not json-able', () async {
+          final response = Response.Forbidden(Exception('No access'));
+          final httpReq = FakeHttpRequest();
+          await writeResponse(httpReq, Future.value(response));
+          expect(
+              httpReq.response.headers.contentType, equals(ContentType.text));
+          expect((httpReq.response as FakeHttpResponse).body, isA<Exception>());
+        });
+      });
+    });
+  });
+
   group('Headers', () {
     group('set', () {
       final headers = Headers();
