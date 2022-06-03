@@ -15,7 +15,7 @@ jobs:
         with:
           node-version: 14.x
       - name: Test build
-        working-directory: docs
+        working-directory: doc/site
         run: |
           yarn install --frozen-lockfile
           yarn build
