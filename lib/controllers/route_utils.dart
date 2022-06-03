@@ -59,8 +59,8 @@ class Options extends RouteBindingDecorator {
 
 /// Path annotation to be used on top level controllers to set a root path before mounting methods
 class Path {
-  final path;
-  const Path(String this.path);
+  final String path;
+  const Path(this.path);
 }
 
 final GetAnnotation = reflectClass(Get);
