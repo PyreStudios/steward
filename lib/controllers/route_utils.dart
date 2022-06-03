@@ -8,62 +8,59 @@ abstract class RouteBindingDecorator {
 
   final List<MiddlewareFunc> middleware;
 
-  RouteBindingDecorator(this.path, this.verb, [this.middleware = const []]) {
-    assert(path.startsWith('/'), 'RouteBinding Path must start with /');
-  }
+  const RouteBindingDecorator(this.path, this.verb,
+      [this.middleware = const []]);
 }
 
 class Get extends RouteBindingDecorator {
-  Get(String path, [List<MiddlewareFunc> middleware = const []])
+  const Get(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Get, middleware);
 }
 
 class Post extends RouteBindingDecorator {
-  Post(String path, [List<MiddlewareFunc> middleware = const []])
+  const Post(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Post, middleware);
 }
 
 class Put extends RouteBindingDecorator {
-  Put(String path, [List<MiddlewareFunc> middleware = const []])
+  const Put(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Put, middleware);
 }
 
 class Patch extends RouteBindingDecorator {
-  Patch(String path, [List<MiddlewareFunc> middleware = const []])
+  const Patch(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Patch, middleware);
 }
 
 class Delete extends RouteBindingDecorator {
-  Delete(String path, [List<MiddlewareFunc> middleware = const []])
+  const Delete(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Delete, middleware);
 }
 
 class Trace extends RouteBindingDecorator {
-  Trace(String path, [List<MiddlewareFunc> middleware = const []])
+  const Trace(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Trace, middleware);
 }
 
 class Head extends RouteBindingDecorator {
-  Head(String path, [List<MiddlewareFunc> middleware = const []])
+  const Head(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Head, middleware);
 }
 
 class Connect extends RouteBindingDecorator {
-  Connect(String path, [List<MiddlewareFunc> middleware = const []])
+  const Connect(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Connect, middleware);
 }
 
 class Options extends RouteBindingDecorator {
-  Options(String path, [List<MiddlewareFunc> middleware = const []])
+  const Options(String path, [List<MiddlewareFunc> middleware = const []])
       : super(path, HttpVerb.Options, middleware);
 }
 
 /// Path annotation to be used on top level controllers to set a root path before mounting methods
 class Path {
   final String path;
-  Path(this.path) {
-    assert(!path.endsWith('/'), 'Path cannot end with a "/"');
-  }
+  const Path(this.path);
 }
 
 final GetAnnotation = reflectClass(Get);
