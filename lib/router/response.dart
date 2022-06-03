@@ -63,7 +63,12 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   // if we dont know what the content type is at this point, we infer it.
   var response = await resp;
   var body = await response.body;
-  var jsonBody = jsonEncode(body);
+  var jsonBody = body;
+  try {
+    jsonBody = jsonEncode(body);
+  } catch (_) {
+    // TODO: should we warn the user that this failed?
+  }
   var bodyIsJsonable = jsonBody != body;
 
   if (response.headers.contentType == null) {
