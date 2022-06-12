@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 class FakeHttpHeaders extends Fake implements HttpHeaders {
   ContentType? _contentType;
   DateTime? _date;
-  Map<String, dynamic> _headers = {};
+  final Map<String, dynamic> _headers = {};
 
   @override
   DateTime? get date => _date;
@@ -38,7 +38,7 @@ class FakeHttpHeaders extends Fake implements HttpHeaders {
 
 class FakeHttpResponse extends Fake implements HttpResponse {
   int _statusCode = 200;
-  FakeHttpHeaders _headers = FakeHttpHeaders();
+  final FakeHttpHeaders _headers = FakeHttpHeaders();
   dynamic body;
 
   @override
@@ -59,7 +59,7 @@ class FakeHttpResponse extends Fake implements HttpResponse {
 }
 
 class FakeHttpRequest extends Fake implements HttpRequest {
-  FakeHttpResponse _response = FakeHttpResponse();
+  final FakeHttpResponse _response = FakeHttpResponse();
   @override
   HttpResponse get response => _response;
 }

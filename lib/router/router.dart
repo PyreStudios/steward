@@ -62,7 +62,7 @@ class Router {
           verb: element.verb,
           path: element.path,
           callback: controllerItemRouteHandler(controllerType, element.method),
-          middleware: element.middlewares));
+          middleware: element.middleware));
     });
   }
 

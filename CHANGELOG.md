@@ -4,9 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [UNRELEASED]
+## [0.2.6] - 2022-06-12
+### Added
+- Requests now expose cookies
+- Requests now expose the x509 Certificate object
+- Requests now expose the session
+- Responses now support setting cookies
+- Responses now have a named constructor for temporary and permenant redirects
 
-## [0.2.5.] - 2022-05-27
+## [0.2.5] - 2022-05-27
 ### Fixed
 - Resolved an issue where loopback was being used vs AnyIPvX and prevented use from docker containers.
 

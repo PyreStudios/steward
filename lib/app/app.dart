@@ -18,6 +18,12 @@ class App {
     _container = router.container;
   }
 
+  /// Start ultimate runs `router.serverHTTP` but unlike simply calling
+  /// `router.serverHTTP`, `start` will also bind the environment into the DI container,
+  /// load the config.yml file into the container, and load all view templates into the container.
+  /// This is the recommended way to start the app.
+  ///
+  /// In the future, more functionality may be added to the `start` method.
   Future start() async {
     _bindEnvironmentIntoContainer();
     _loadConfigIntoContainer();
