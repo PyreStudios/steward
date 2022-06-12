@@ -4,6 +4,7 @@ const _originKey = 'Access-Control-Allow-Origin';
 const _methodsKey = 'Access-Control-Allow-Methods';
 const _headersKey = 'Access-Control-Allow-Headers';
 
+/// The CORS middleware is a simple middleware that sets CORS headers for your requests
 MiddlewareFunc CorsMiddleware(
     {List<String>? allowOrigin,
     List<String>? allowMethods,
