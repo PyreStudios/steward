@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bosun/bosun.dart';
+import './new_controller.dart';
 
 var configTemplate = '''---
 app:
@@ -81,7 +82,7 @@ import 'package:{{{name}}}/controllers/sample_controller.dart';
 
 Future main() async {
   var router = Router();
-  router.get('/', controller: SimpleController(), method:'home');
+  router.mount(SimpleController);
   router.get('/hello', handler: (Request request) async {
     return Response.Ok('Hello World!');
   });
@@ -105,7 +106,10 @@ Future main() async {
 ''';
 
 var controllerTemplate = '''import 'package:steward/steward.dart';
+import 'package:steward/controllers/route_utils.dart';
+
 class SimpleController extends Controller {
+  @Get('/home')
   Response home(Request request) {
     return view('main');
   }
@@ -117,22 +121,24 @@ class NewCommand extends Command {
       : super(
             command: 'new',
             description: 'Create a new steward app',
-            example: 'steward new <app-name>');
+            example: 'steward new <app-name>',
+            subcommands: [NewControllerCommand()]);
 
   @override
   void run(List<String> args, Map<String, dynamic> flags) {
     var name = args[0];
 
-    Process.runSync('dart', ['create', name, '--template', 'console-simple']);
+    Process.runSync('dart', ['create', name, '--template', 'console-full']);
 
     var config = File('./$name/config.yml');
     config.writeAsStringSync(configTemplate);
-    var viewsDir = Directory('$name/views');
-    var controllersDir = Directory('$name/lib/controllers');
-    var assetsDir = Directory('$name/assets');
-    viewsDir.createSync();
-    controllersDir.createSync();
-    assetsDir.createSync();
+    Directory('./$name/views').createSync();
+    Directory('./$name/lib/controllers').createSync();
+    Directory('./$name/assets').createSync();
+
+    // remove generated files from dart tool
+    File('$name/lib/$name.dart').deleteSync();
+    File('$name/test/${name}_test.dart').deleteSync();
 
     // write initial files
     File('$name/lib/app.dart')

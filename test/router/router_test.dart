@@ -9,6 +9,12 @@ class UserService {
   String gimme() => 'got it';
 }
 
+class ComplexResponseBody {
+  String content = 'Hello';
+
+  toJson() => {'content': content};
+}
+
 @Path('/cont')
 class Cont extends Controller {
   @Get('/')
@@ -76,6 +82,20 @@ void main() {
         await client.post(InternetAddress.loopbackIPv4.host, 4040, '/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals('Success'));
+  });
+
+  test('Router responds appropriately to get requests with object bodies',
+      () async {
+    router.post('/', (_) async {
+      return Response.Ok(ComplexResponseBody());
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(await response.transform(utf8.decoder).first,
+        equals('{"content":"Hello"}'));
   });
 
   test('Router responds appropriately to simple PUT requests', () async {
@@ -179,5 +199,60 @@ void main() {
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
     await request.close();
     expect(called, true);
+  });
+
+  test('Router still responds when an exception is raised', () async {
+    router.post('/', (_) async {
+      throw Exception('OH NO');
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
+    final response = await request.close();
+    expect(response.statusCode, equals(500));
+    expect(await response.transform(utf8.decoder).first,
+        contains('Exception: OH NO'));
+  });
+
+  test('Router supports trailing slash as well as not trailing slash',
+      () async {
+    var counter = 0;
+    router.post('/nice', (_) async {
+      counter++;
+      return Response.Ok();
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice');
+    final response = await request.close();
+    expect(counter, equals(1));
+    final request2 =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/');
+    final response2 = await request2.close();
+    expect(counter, equals(2));
+    final request3 =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/hat');
+    final response3 = await request3.close();
+    expect(counter, equals(2));
+  });
+
+  test('Router supports case insensitive matching', () async {
+    var counter = 0;
+    router.post('/nice', (_) async {
+      counter++;
+      return Response.Ok();
+    });
+
+    final client = HttpClient();
+    final request =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice');
+    final response = await request.close();
+    expect(counter, equals(1));
+    final request2 =
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/NICE');
+    final response2 = await request2.close();
+    expect(counter, equals(2));
   });
 }

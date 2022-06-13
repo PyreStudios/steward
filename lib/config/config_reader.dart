@@ -10,6 +10,7 @@ class ConfigReader {
 
   ConfigReader({required this.file});
 
+  /// Reads the config file and parses it into a Map.
   void read() {
     var data = file.readAsStringSync();
     YamlMap yamlMap = loadYaml(data);

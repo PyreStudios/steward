@@ -1,6 +1,10 @@
 abstract class Container {
   void bind<T>(String key, T Function(Container) fn);
   T? make<T>(String key);
+
+  /// Clones a container so that a new container can have values bound to it
+  /// without updating this current container.
+  Container clone();
 }
 
 /// A rudimentary DI container implementation
@@ -23,6 +27,11 @@ class CacheContainer implements Container {
       return bindings[key](this);
     }
     return null;
+  }
+
+  @override
+  Container clone() {
+    return CacheContainer()..bindings.addAll(bindings);
   }
 }
 

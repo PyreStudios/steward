@@ -1,13 +1,10 @@
 import 'dart:io';
 import 'dart:mirrors';
 
-import 'package:steward/container/container.dart';
 import 'package:steward/controllers/controller.dart';
 import 'package:steward/controllers/route_utils.dart';
-import 'package:steward/middleware/middleware.dart';
-import 'package:steward/router/response.dart';
-import 'package:steward/router/request.dart';
 import 'package:path_to_regexp/path_to_regexp.dart';
+import 'package:steward/steward.dart';
 
 export 'package:steward/router/response.dart';
 export 'package:steward/router/request.dart';
@@ -49,7 +46,7 @@ class Router {
   List<RouteBinding> bindings = [];
   List<MiddlewareFunc> middleware = [];
   HttpServer? server;
-  dynamic address = InternetAddress.ANY_IP_V4;
+  dynamic address = InternetAddress.anyIPv4;
 
   Router({this.address});
 
@@ -65,7 +62,7 @@ class Router {
           verb: element.verb,
           path: element.path,
           callback: controllerItemRouteHandler(controllerType, element.method),
-          middleware: middleware));
+          middleware: element.middleware));
     });
   }
 
@@ -123,7 +120,7 @@ class Router {
   Future serveHTTP() async {
     var port = container.make('@config.app.port') ?? 4040;
     server = await HttpServer.bind(
-      InternetAddress.loopbackIPv4,
+      InternetAddress.anyIPv6,
       port,
     );
 
@@ -133,7 +130,19 @@ class Router {
       var hasMatch = false;
       for (var i = 0; i < bindings.length; i++) {
         var params = <String>[];
-        var regex = pathToRegExp(bindings[i].path, parameters: params);
+
+        // Get the root pattern from the pathToRegex call
+        var rootPattern =
+            pathToRegExp(bindings[i].path, parameters: params).pattern;
+        // Build a new regex by removing the $, adding in the optional trailing slash
+        // and then adding the end terminator back on ($).
+        var cleanedPattern = rootPattern.substring(0, rootPattern.length - 1);
+        // account for the path already ending in slash
+        if (cleanedPattern.endsWith('/')) {
+          cleanedPattern =
+              cleanedPattern.substring(0, cleanedPattern.length - 1);
+        }
+        var regex = RegExp('$cleanedPattern\\/?\$', caseSensitive: false);
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {
@@ -142,17 +151,24 @@ class Router {
           if (match != null) {
             var pathParams = extract(params, match);
             var req = Request(request: request, pathParams: pathParams)
-              ..setContainer(container);
+              ..setContainer(container.clone());
 
-            var allMiddlewares = [...middleware, ...bindings[i].middleware];
+            var allMiddlewares = [
+              ...bindings[i].middleware.reversed,
+              ...middleware.reversed,
+            ];
 
-            var handler = bindings[i].process;
-            allMiddlewares.forEach((element) async {
-              handler = element(handler);
-            });
+            try {
+              var handler = bindings[i].process;
+              allMiddlewares.forEach((element) async {
+                handler = element(handler);
+              });
 
-            var response = handler(req);
-            await writeResponse(request, response);
+              var response = handler(req);
+              await writeResponse(request, response);
+            } catch (err, stacktrace) {
+              await writeErrorResponse(request, err, stacktrace);
+            }
             break;
           }
         }
@@ -160,7 +176,7 @@ class Router {
 
       if (!hasMatch) {
         // TODO: We can clean this up a bit
-        var allMiddlewares = [...middleware];
+        var allMiddlewares = [...middleware.reversed];
         var handler = (Request req) => Future.value(Response.NotFound());
         allMiddlewares.forEach((element) {
           handler = element(handler);
@@ -171,6 +187,20 @@ class Router {
       }
 
       await request.response.close();
+    }
+  }
+
+  Future<void> writeErrorResponse(request, err, stacktrace) async {
+    if (container.make('@environment') == Environment.production) {
+      // if things are production, we need to treat this all differently.
+      return await writeResponse(request, Future.value(Response.Boom()));
+    } else {
+      return await writeResponse(request, Future.value(Response.Boom('''
+Something went wrong.
+${err.toString()}
+
+${stacktrace.toString()}
+''')));
     }
   }
 }

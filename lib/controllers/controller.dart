@@ -40,13 +40,14 @@ Future<Response> Function(Request request) controllerItemRouteHandler(
     final _controller =
         ControllerMirrorFactory.createMirror(controllerType, request.container);
     final result = _controller.invoke(methodName, [request]).reflectee;
-    switch (result.runtimeType) {
-      case Response:
-        return Future.value(result);
-      case Future<Response>:
-        return result;
-      default:
-        return Future.value(Response(200, body: result));
+    if (result is Response) {
+      return Future.value(result);
+    } else if (result is Future<Response>) {
+      return result;
+    } else if (result is Future) {
+      return result.then((value) => Response(200, body: value));
+    } else {
+      return Future.value(Response(200, body: result));
     }
   };
 }

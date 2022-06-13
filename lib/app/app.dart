@@ -7,19 +7,33 @@ import 'package:steward/config/config_reader.dart';
 
 class AppConfigurationException implements Exception {}
 
+enum Environment { production, other }
+
 class App {
   Router router;
+  Environment environment;
   late Container _container;
 
-  App({required this.router}) {
+  App({required this.router, this.environment = Environment.other}) {
     _container = router.container;
   }
 
+  /// Start ultimate runs `router.serverHTTP` but unlike simply calling
+  /// `router.serverHTTP`, `start` will also bind the environment into the DI container,
+  /// load the config.yml file into the container, and load all view templates into the container.
+  /// This is the recommended way to start the app.
+  ///
+  /// In the future, more functionality may be added to the `start` method.
   Future start() async {
+    _bindEnvironmentIntoContainer();
     _loadConfigIntoContainer();
     _loadViewsIntoContainer();
 
     return await router.serveHTTP();
+  }
+
+  void _bindEnvironmentIntoContainer() {
+    _container.bind('@environment', (_) => environment);
   }
 
   /// Loads and parses the config file, then flattens the config map
