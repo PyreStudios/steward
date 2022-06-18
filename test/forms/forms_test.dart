@@ -2,27 +2,49 @@ import 'package:test/test.dart';
 import 'package:steward/steward.dart';
 
 class BadForm extends Form {
-  BadForm(): super((form) {
-    List<FormError> errors = [];
+  BadForm()
+      : super((form) {
+          var errors = <FormError>[];
 
-    if (1 != 2) {
-      errors.add(FormError('1 != 2'));
-    }
+          if (1 != 2) {
+            errors.add(FormError('1 != 2'));
+          }
 
-    return errors;
-  });
+          return errors;
+        });
 }
 
 class GoodForm extends Form {
-  GoodForm(): super((form) {
-    List<FormError> errors = [];
+  GoodForm()
+      : super((form) {
+          var errors = <FormError>[];
 
-    if (1 != 1) {
-      errors.add(FormError('this should never happen'));
-    }
+          if (1 != 1) {
+            errors.add(FormError('this should never happen'));
+          }
 
-    return errors;
-  });
+          return errors;
+        });
+}
+
+class User {
+  final String name;
+  final int age;
+  const User({required this.name, required this.age});
+}
+
+class FormWithData extends Form {
+  User user;
+  FormWithData(this.user)
+      : super((form) {
+          var errors = <FormError>[];
+
+          if (user.age < 18) {
+            errors.add(FormError('user is under 18'));
+          }
+
+          return errors;
+        });
 }
 
 void main() {
@@ -38,6 +60,12 @@ void main() {
       var form = GoodForm();
       expect(form.validate().isEmpty, true);
       expect(form.isValid, true);
+    });
+
+    test('example with incoming data', () {
+      var form = FormWithData(User(age: 16, name: 'John'));
+      expect(form.validate().isNotEmpty, true);
+      expect(form.validate()[0].message, 'user is under 18');
     });
   });
 }
