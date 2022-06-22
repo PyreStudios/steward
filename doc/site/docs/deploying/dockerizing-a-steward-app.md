@@ -24,7 +24,7 @@ RUN dart pub update
 
 # Start server.
 EXPOSE 4040
-CMD ["dart", "run", "lib/app.dart"]
+CMD ["dart", "run", "lib/main.dart"]
 ```
 
 The important thing to note is that the `.dart_tool/` folder has references to your local machine paths (if you've ran the app outside of a container). `dart` will use these references when trying to compile and the references in this file point to code outside of your project directory (your user's pubcache for example). For this reason, we delete the `.dart_tool/` folder after copying everything over.

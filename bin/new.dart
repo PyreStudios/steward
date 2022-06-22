@@ -141,7 +141,7 @@ class NewCommand extends Command {
     File('$name/test/${name}_test.dart').deleteSync();
 
     // write initial files
-    File('$name/lib/app.dart')
+    File('$name/lib/main.dart')
         .writeAsStringSync(appTemplate.replaceAll('{{{name}}}', name));
     File('$name/lib/controllers/sample_controller.dart')
         .writeAsStringSync(controllerTemplate);
