@@ -116,6 +116,14 @@ void main() {
       });
     });
     group('Write response', () {
+      test('handles basic strings', () async {
+        final response = Response.Ok('version 1.0');
+        final httpReq = FakeHttpRequest();
+        await writeResponse(httpReq, Future.value(response));
+        expect(httpReq.response.headers.contentType, equals(ContentType.text));
+        expect(
+            (httpReq.response as FakeHttpResponse).body, equals('version 1.0'));
+      });
       group('sets content type', () {
         test('when body is json-able', () async {
           final response = Response.Ok([]);

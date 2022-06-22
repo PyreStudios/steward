@@ -110,7 +110,7 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
   var bodyIsJsonable = jsonBody != body;
 
   if (response.headers.contentType == null) {
-    if (bodyIsJsonable) {
+    if (bodyIsJsonable && body is! String) {
       response.headers.contentType = ContentType.json;
     } else {
       response.headers.contentType = ContentType.text;
