@@ -7,9 +7,9 @@
 
 -----------
 
-[![pub version](https://img.shields.io/pub/v/steward)](https://img.shields.io/pub/v/steward)
+[![pub version](https://img.shields.io/pub/v/steward)](https://pub.dev/packages/steward)
 [![codecov](https://codecov.io/gh/PyreStudios/steward/branch/main/graph/badge.svg?token=CAK5MR60ZI)](https://codecov.io/gh/PyreStudios/steward)
-[![points](https://img.shields.io/pub/points/steward)](https://img.shields.io/pub/points/steward)
+[![points](https://img.shields.io/pub/points/steward)](https://pub.dev/packages/steward)
 [![likes](https://img.shields.io/github/stars/pyrestudios/steward)](https://img.shields.io/github/stars/pyrestudios/steward)
 [![build status](https://img.shields.io/github/checks-status/pyrestudios/steward/main?label=main%20build)](https://img.shields.io/github/checks-status/pyrestudios/steward/main?label=main%20build)
 
