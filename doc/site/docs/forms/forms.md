@@ -15,26 +15,28 @@ class _SignUpForm extends Form {
 
   _SignUpForm(Map<String, String> json)
       : email = json['email'],
-        password = json['password'],
-        super((Form _self) {
-          final self = _self as _SignUpForm;
-          final errors = <FormError>[];
+        password = json['password'];
+  
+  @override
+  List<FormError> validator() {
+    final self = _self as _SignUpForm;
+    final errors = <FormError>[];
 
-          if (self.email == null || self.password == null) {
-            errors.add(FormError('Email and password are required'));
-          }
+    if (self.email == null || self.password == null) {
+      errors.add(FormError('Email and password are required'));
+    }
 
-          if (self.email?.isEmpty == true) {
-            errors.add(FormError('Email is required'));
-          }
+    if (self.email?.isEmpty == true) {
+      errors.add(FormError('Email is required'));
+    }
 
-          if (self.password?.isEmpty == true &&
-              (self.password?.length ?? 0) < 8) {
-            errors.add(FormError('Password is not strong enough.'));
-          }
+    if (self.password?.isEmpty == true &&
+        (self.password?.length ?? 0) < 8) {
+      errors.add(FormError('Password is not strong enough.'));
+    }
 
-          return errors;
-        });
+    return errors;
+  }
 }
 ```
 
