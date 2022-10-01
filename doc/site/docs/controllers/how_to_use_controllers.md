@@ -54,6 +54,50 @@ class SampleController extends Controller {
 
 This assumes that you have a middleware named `userHasAccessMiddleware` in scope of this file. You'll want to substitute the name of your own middleware instead of using that one.
 
+## The Path Annotation
+
+The Path annotation can be applied to a class that extends `Controller` and allows you to set up the "root" path for that controller. Let's add a path annotation to the previous example:
+
+```dart
+@Path('/sample')
+class SampleController extends Controller {
+  @Injectable('UserService')
+  late UserService userService;
+  
+  @Get('/version')
+  version(_) => 'v1.0';
+
+  @Get('/show', [userHasAccessMiddleware])
+  Response show(Request request) => view('main_template');
+  
+  @Get('/users', [userHasAccessMiddleware])
+  Response users => UserService.getUsers();
+}
+```
+
+If the server were running on localhost:1234, mounting this controller into the router would create the following routes:
+- localhost:1234/sample/version
+- localhost:1234/sample/show
+- localhost:1234/sample/users
+
+Additionally, middleware can be added to the Path parameter, too. This is effectively the same thing as applying the middleware individually to _all_ of the routes under that path. For example, we can add the `userHasAccessMiddleware` to the `@Path` declaration, but it would also apply to the `@Get('/version')` declaration, too. A common example of when you may use this is to add controller-level middleware such as a controller specific logger or guarding access to all controller properties if a user is not logged in.
+
+```dart
+@Path('/sample', [userHasAccessMiddleware])
+class SampleController extends Controller {
+  @Injectable('UserService')
+  late UserService userService;
+  
+  @Get('/version')
+  version(_) => 'v1.0';
+
+  @Get('/show')
+  Response show(Request request) => view('main_template');
+  
+  @Get('/users')
+  Response users => UserService.getUsers();
+}
+```
 
 ## The View function
 
