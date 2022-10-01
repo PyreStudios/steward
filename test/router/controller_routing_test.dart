@@ -5,18 +5,27 @@ import 'package:steward/controllers/route_utils.dart';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
-var middlewareWasCalled = false;
+var handlerMiddlewareCalled = false;
+var controllerMiddlewareCalled = false;
 
 /// An extremely simple Middleware function that prints the incoming request URI
 Future<Response> Function(Request) TestMiddleware(
     Future<Response> Function(Request) next) {
   return (Request request) {
-    middlewareWasCalled = true;
+    handlerMiddlewareCalled = true;
     return next(request);
   };
 }
 
-@Path('/cont')
+Future<Response> Function(Request) ControllerMiddleware(
+    Future<Response> Function(Request) next) {
+  return (Request request) {
+    controllerMiddlewareCalled = true;
+    return next(request);
+  };
+}
+
+@Path('/cont', [ControllerMiddleware])
 class Cont extends Controller {
   static const body = 'test middleware should be called';
 
@@ -45,7 +54,10 @@ void main() {
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/cont/');
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals(Cont.body));
-    expect(middlewareWasCalled, isTrue);
+    expect(handlerMiddlewareCalled, isTrue,
+        reason: 'Handler Middleware did not trigger properly');
+    expect(controllerMiddlewareCalled, isTrue,
+        reason: 'Controller middleware did not trigger properly');
   });
 
   test('Trailing slash should not be required on a / path', () async {
@@ -57,5 +69,4 @@ void main() {
     final response = await request.close();
     expect(await response.transform(utf8.decoder).first, equals(Cont.body));
   });
- 
 }

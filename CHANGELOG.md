@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2022-009-13
+## [0.3.1] - 2022-10-01
+### Added
+- Support for middlware in the @Path annotation when working with controllers.
+
+## [0.3.0] - 2022-09-13
 ### Changed
 - The Form API has changed a small bit. This is a breaking change. Overriding the validator function is the preferred way forward instead of passing it via constructor.
 

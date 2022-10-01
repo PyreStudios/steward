@@ -71,7 +71,8 @@ class Options extends RouteBindingDecorator {
 /// Path annotation to be used on top level controllers to set a root path before mounting methods
 class Path {
   final String path;
-  const Path(this.path);
+  final List<MiddlewareFunc> middleware;
+  const Path(this.path, [this.middleware = const []]);
 }
 
 /// Annotation for creating GET route bindings
@@ -126,12 +127,12 @@ class PathControllerReflectiveBinding extends RouteBindingDecorator {
 
 List<PathControllerReflectiveBinding> getPaths(ClassMirror mirror) {
   final paths = <PathControllerReflectiveBinding>[];
-  var basePath = '';
+  Path? basePath;
 
   // If the class has a @Path specified, we'll set it as the base
   mirror.metadata.forEach((metadata) {
     if (metadata.type == PathAnnotation) {
-      basePath = (metadata.reflectee as Path).path;
+      basePath = metadata.reflectee as Path;
     }
   });
 
@@ -140,8 +141,11 @@ List<PathControllerReflectiveBinding> getPaths(ClassMirror mirror) {
       if (_allHttpVerbs.contains(meta.type)) {
         // This is indeed a verb!
         final injectable = (meta.reflectee as RouteBindingDecorator);
-        paths.add(PathControllerReflectiveBinding(basePath + injectable.path,
-            injectable.verb, value.simpleName, injectable.middleware));
+        paths.add(PathControllerReflectiveBinding(
+            (basePath?.path ?? '') + injectable.path,
+            injectable.verb,
+            value.simpleName,
+            [...?(basePath?.middleware), ...injectable.middleware]));
       }
     });
   });
