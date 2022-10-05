@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bosun/bosun.dart';
 import 'package:recase/recase.dart';
 
-var controllerTemplate = '''import 'package:steward/steward.dart';
+var middlwareTemplate = '''import 'package:steward/steward.dart';
 
 Future<Response> Function(Request) {{{name}}}Middleware(
     Future<Response> Function(Request) next) {
@@ -32,6 +32,6 @@ class NewMiddlewareCommand extends Command {
       middleware.createSync();
     }
     File('./lib/middleware/${name.snakeCase}.dart').writeAsStringSync(
-        controllerTemplate.replaceAll('{{{name}}}', name.pascalCase));
+        middlwareTemplate.replaceAll('{{{name}}}', name.pascalCase));
   }
 }
