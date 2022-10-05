@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bosun/bosun.dart';
 import './new_controller.dart';
+import 'new_middleware.dart';
 
 var configTemplate = '''---
 app:
@@ -122,7 +123,7 @@ class NewCommand extends Command {
             command: 'new',
             description: 'Create a new steward app',
             example: 'steward new <app-name>',
-            subcommands: [NewControllerCommand()]);
+            subcommands: [NewControllerCommand(), NewMiddlewareCommand()]);
 
   @override
   void run(List<String> args, Map<String, dynamic> flags) {
