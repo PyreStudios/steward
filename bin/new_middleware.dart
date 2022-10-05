@@ -4,7 +4,6 @@ import 'package:bosun/bosun.dart';
 import 'package:recase/recase.dart';
 
 var controllerTemplate = '''import 'package:steward/steward.dart';
-import 'package:steward/controllers/route_utils.dart';
 
 Future<Response> Function(Request) {{{name}}}Middleware(
     Future<Response> Function(Request) next) {
