@@ -12,7 +12,7 @@ class UserService {
 class ComplexResponseBody {
   String content = 'Hello';
 
-  toJson() => {'content': content};
+  Map<String, dynamic> toJson() => {'content': content};
 }
 
 @Path('/cont')
@@ -226,15 +226,15 @@ void main() {
     final client = HttpClient();
     final request =
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice');
-    final response = await request.close();
+    await request.close();
     expect(counter, equals(1));
     final request2 =
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/');
-    final response2 = await request2.close();
+    await request2.close();
     expect(counter, equals(2));
     final request3 =
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice/hat');
-    final response3 = await request3.close();
+    await request3.close();
     expect(counter, equals(2));
   });
 
@@ -248,11 +248,11 @@ void main() {
     final client = HttpClient();
     final request =
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/nice');
-    final response = await request.close();
+    await request.close();
     expect(counter, equals(1));
     final request2 =
         await client.get(InternetAddress.loopbackIPv4.host, 4040, '/NICE');
-    final response2 = await request2.close();
+    await request2.close();
     expect(counter, equals(2));
   });
 }

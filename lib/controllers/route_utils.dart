@@ -76,45 +76,45 @@ class Path {
 }
 
 /// Annotation for creating GET route bindings
-final GetAnnotation = reflectClass(Get);
+final getAnnotation = reflectClass(Get);
 
 /// Annotation for creating PUT route bindings
-final PutAnnotation = reflectClass(Put);
+final putAnnotation = reflectClass(Put);
 
 /// Annotation for creating POST route bindings
-final PostAnnotation = reflectClass(Post);
+final postAnnotation = reflectClass(Post);
 
 /// Annotation for creating PATCH route bindings
-final PatchAnnotation = reflectClass(Patch);
+final patchAnnotation = reflectClass(Patch);
 
 /// Annotation for creating DELETE route bindings
-final DeleteAnnotation = reflectClass(Delete);
+final deleteAnnotation = reflectClass(Delete);
 
 /// Annotation for creating TRACE route bindings
-final TraceAnnotation = reflectClass(Trace);
+final traceAnnotation = reflectClass(Trace);
 
 /// Annotation for creating HEAD route bindings
-final HeadAnnotation = reflectClass(Head);
+final headAnnotation = reflectClass(Head);
 
 /// Annotation for creating OPTIONS route bindings
-final OptionsAnnotation = reflectClass(Options);
+final optionsAnnotation = reflectClass(Options);
 
 /// Annotation for creating CONNECT route bindings
-final ConnectAnnotation = reflectClass(Connect);
+final connectAnnotation = reflectClass(Connect);
 
 /// Annotation for creating a root path for a controller
-final PathAnnotation = reflectClass(Path);
+final pathAnnotation = reflectClass(Path);
 
 final _allHttpVerbs = [
-  GetAnnotation,
-  PutAnnotation,
-  PostAnnotation,
-  PatchAnnotation,
-  DeleteAnnotation,
-  TraceAnnotation,
-  HeadAnnotation,
-  OptionsAnnotation,
-  ConnectAnnotation
+  getAnnotation,
+  putAnnotation,
+  postAnnotation,
+  patchAnnotation,
+  deleteAnnotation,
+  traceAnnotation,
+  headAnnotation,
+  optionsAnnotation,
+  connectAnnotation
 ];
 
 class PathControllerReflectiveBinding extends RouteBindingDecorator {
@@ -131,7 +131,7 @@ List<PathControllerReflectiveBinding> getPaths(ClassMirror mirror) {
 
   // If the class has a @Path specified, we'll set it as the base
   mirror.metadata.forEach((metadata) {
-    if (metadata.type == PathAnnotation) {
+    if (metadata.type == pathAnnotation) {
       basePath = metadata.reflectee as Path;
     }
   });
