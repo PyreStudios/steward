@@ -4,12 +4,14 @@ import 'dart:mirrors';
 import 'package:steward/controllers/controller.dart';
 import 'package:steward/controllers/route_utils.dart';
 import 'package:path_to_regexp/path_to_regexp.dart';
+import 'package:steward/router/static_binding.dart';
 import 'package:steward/steward.dart';
 
 export 'package:steward/router/response.dart';
 export 'package:steward/router/request.dart';
 
 enum HttpVerb { Connect, Delete, Get, Head, Options, Patch, Post, Put, Trace }
+
 typedef RequestCallback = Future<Response> Function(Request request);
 
 abstract class Processable {
@@ -20,6 +22,8 @@ abstract class RouteBinding implements Processable {
   late HttpVerb verb;
   late String path;
   List<MiddlewareFunc> middleware = [];
+
+  bool get isPrefixBinding;
 
   RouteBinding(
       {required this.verb, required this.path, this.middleware = const []});
@@ -39,6 +43,9 @@ class _FunctionBinding extends RouteBinding {
   Future<Response> process(Request request) {
     return callback(request);
   }
+
+  @override
+  bool get isPrefixBinding => false;
 }
 
 class Router {
@@ -94,6 +101,9 @@ class Router {
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Put, handler, middleware: middleware);
 
+  void static(String path, {List<MiddlewareFunc> middleware = const []}) =>
+      bindings.add(StaticBinding(path: path));
+
   void trace(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Trace, handler, middleware: middleware);
@@ -132,8 +142,9 @@ class Router {
         var params = <String>[];
 
         // Get the root pattern from the pathToRegex call
-        var rootPattern =
-            pathToRegExp(bindings[i].path, parameters: params).pattern;
+        var rootPattern = pathToRegExp(bindings[i].path,
+                parameters: params, prefix: bindings[i].isPrefixBinding)
+            .pattern;
         // Build a new regex by removing the $, adding in the optional trailing slash
         // and then adding the end terminator back on ($).
         var cleanedPattern = rootPattern.substring(0, rootPattern.length - 1);
