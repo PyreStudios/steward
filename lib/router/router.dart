@@ -101,8 +101,8 @@ class Router {
           {List<MiddlewareFunc> middleware = const []}) =>
       _addBinding(path, HttpVerb.Put, handler, middleware: middleware);
 
-  void static(String path, {List<MiddlewareFunc> middleware = const []}) =>
-      bindings.add(StaticBinding(path: path));
+  void staticFiles(String path, {List<MiddlewareFunc> middleware = const []}) =>
+      bindings.add(StaticBinding(path: path, middleware: middleware));
 
   void trace(String path, RequestCallback handler,
           {List<MiddlewareFunc> middleware = const []}) =>
@@ -141,19 +141,22 @@ class Router {
       for (var i = 0; i < bindings.length; i++) {
         var params = <String>[];
 
-        // Get the root pattern from the pathToRegex call
+// Get the root pattern from the pathToRegex call
         var rootPattern = pathToRegExp(bindings[i].path,
                 parameters: params, prefix: bindings[i].isPrefixBinding)
             .pattern;
+
+        // TODO: Circumvent this for prefix bindings I guess?
+
         // Build a new regex by removing the $, adding in the optional trailing slash
         // and then adding the end terminator back on ($).
-        var cleanedPattern = rootPattern.substring(0, rootPattern.length - 1);
+        var cleanedPattern = rootPattern.substring(0, rootPattern.lastIndexOf('\$'));
         // account for the path already ending in slash
         if (cleanedPattern.endsWith('/')) {
           cleanedPattern =
               cleanedPattern.substring(0, cleanedPattern.length - 1);
         }
-        var regex = RegExp('$cleanedPattern\\/?\$', caseSensitive: false);
+        var regex = RegExp('$cleanedPattern\\/?${bindings[i].isPrefixBinding ? '\$)' :'\$'}', caseSensitive: false);
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {

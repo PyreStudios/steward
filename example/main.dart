@@ -12,6 +12,8 @@ class SimpleController extends Controller {
 
 Future main() async {
   var router = Router();
+
+  router.staticFiles('/assets');
   router.get('/hello', (Request request) async {
     return Response.Ok('Hello World!');
   });
