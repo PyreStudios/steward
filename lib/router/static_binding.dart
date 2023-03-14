@@ -14,7 +14,6 @@ class StaticBinding extends RouteBinding {
     var assetPath = '$path${request.request.uri.path.split(path).last}';
     var assetType = 'text/html';
 
-    print(assetPath);
     try {
       final extension = assetPath.split('.').last;
       if (imageExtensions.contains(extension)) {
@@ -43,8 +42,6 @@ class StaticBinding extends RouteBinding {
       final primaryType = splitAssetType.first;
       final subType = splitAssetType.last;
       response.headers.contentType = ContentType(primaryType, subType);
-
-      print(response);
 
       return response;
     } catch (e) {
