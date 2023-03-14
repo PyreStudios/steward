@@ -14,11 +14,13 @@ class StaticBinding extends RouteBinding {
     var assetPath = '$path${request.request.uri.path.split(path).last}';
     var assetType = 'text/html';
 
+    print(assetPath);
     try {
       final extension = assetPath.split('.').last;
       if (imageExtensions.contains(extension)) {
         assetType = 'image/$extension';
-      } if (textExtensions.contains(extension)) {
+      }
+      if (textExtensions.contains(extension)) {
         assetType = 'text/$extension';
       } else {
         // TODO: this is probably to vague
@@ -35,7 +37,7 @@ class StaticBinding extends RouteBinding {
 
     try {
       final asset = File('./$assetPath');
-      final contents = asset.readAsString();
+      final contents = await asset.readAsString();
       final response = Response(200, body: contents);
       final splitAssetType = assetType.split('/');
       final primaryType = splitAssetType.first;
