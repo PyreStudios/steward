@@ -255,4 +255,14 @@ void main() {
     await request2.close();
     expect(counter, equals(2));
   });
+
+  test('Router supports static files with 404 when not found', () async {
+    router.staticFiles('/static_files');
+
+    final client = HttpClient();
+    final request = await client.get(
+        InternetAddress.loopbackIPv4.host, 4040, '/static_files/not_found.gif');
+    final response = await request.close();
+    expect(response.statusCode, equals(404));
+  });
 }
