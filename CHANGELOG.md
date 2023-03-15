@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2023-03-15
+### Added
+- Support for `.staticFiles('/my-static-files')` on the router.
+
+### Fixed
+- Several inconsistencies with type names that deviated from the dart standard.
+
 ## [0.3.1] - 2022-10-01
 ### Added
 - Support for middlware in the @Path annotation when working with controllers.
