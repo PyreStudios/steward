@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:xml/xml.dart';
 
 const _originKey = 'Access-Control-Allow-Origin';
 const _methodsKey = 'Access-Control-Allow-Methods';
@@ -113,7 +114,12 @@ Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
     if (bodyIsJsonable && body is! String) {
       response.headers.contentType = ContentType.json;
     } else {
-      response.headers.contentType = ContentType.text;
+      try {
+        XmlDocument.parse(body);
+        response.headers.contentType = ContentType.parse('application/xml');
+      } catch (e) {
+        response.headers.contentType = ContentType.text;
+      }
     }
   }
 
