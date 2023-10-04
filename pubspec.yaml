@@ -15,6 +15,7 @@ dependencies:
   flat: ^0.4.0
   mustache_template: ^2.0.0
   yaml: ^3.1.0
+  xml: ^6.4.2
   # These deps are used by the CLI
   recase: ^4.0.0
   bosun: ^0.2.2
