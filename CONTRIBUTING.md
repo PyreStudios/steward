@@ -22,7 +22,7 @@ Does something seem off? Are you seeing crashes that point to our code? Let us k
 
 ## Suggesting Enhancements
 
-Wouldn't it be cool of Steward had an ".explode()" call that wiped your filesystem? Yeah, I didn't think so either, but that doesnt mean we don't want to read your suggestions for the library! Feel free to open an issue to talk through new features or ideas for Steward. Please __do not__ create new Pull Requests for features that havn't been discussed yet. We don't want you to spend your time implementing something that goes against what we believe Steward should be, especially if it won't get accepted.
+Wouldn't it be cool of Steward had an ".explode()" call that wiped your filesystem? Yeah, I didn't think so either, but that doesnt mean we don't want to read your suggestions for the library! Feel free to open an issue to talk through new features or ideas for Steward. Please __do not__ create new Pull Requests for features that haven't been discussed yet. We don't want you to spend your time implementing something that goes against what we believe Steward should be, especially if it won't get accepted.
 
 ## Contributing to discussions on issues and pull requests
 
@@ -44,4 +44,4 @@ This will create a new executable in the `./bin` directory. You can then access 
 
 Steward uses tests to cover some (eventually most) of it's application behavior. Tests are vitally important as they help instill confidence in both the team of contributors as well as the community. It's important to write new tests as we add new functionality and existing tests must pass before changes can be merged in to our main branch.
 
-Tests live in the `tests` folder and can be ran via `dart test` in the root directory.
+Tests live in the `tests` folder and can be ran via `dart test` in the root directory. It's important that tests in our main branch always be passing.
