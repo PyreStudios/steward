@@ -150,57 +150,65 @@ class Router {
 
         // Build a new regex by removing the $, adding in the optional trailing slash
         // and then adding the end terminator back on ($).
-        var cleanedPattern = rootPattern.substring(0, rootPattern.lastIndexOf('\$'));
+        var cleanedPattern =
+            rootPattern.substring(0, rootPattern.lastIndexOf('\$'));
         // account for the path already ending in slash
         if (cleanedPattern.endsWith('/')) {
           cleanedPattern =
               cleanedPattern.substring(0, cleanedPattern.length - 1);
         }
-        var regex = RegExp('$cleanedPattern\\/?${bindings[i].isPrefixBinding ? '\$)' :'\$'}', caseSensitive: false);
+        var regex = RegExp(
+            '$cleanedPattern\\/?${bindings[i].isPrefixBinding ? '\$)' : '\$'}',
+            caseSensitive: false);
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {
-          // TODO: We can clean up the unmatched path a bit too
           var match = regex.matchAsPrefix(request.uri.path);
           if (match != null) {
             var pathParams = extract(params, match);
             var req = Request(request: request, pathParams: pathParams)
               ..setContainer(container.clone());
 
-            var allMiddlewares = [
-              ...bindings[i].middleware.reversed,
-              ...middleware.reversed,
-            ];
-
-            try {
-              var handler = bindings[i].process;
-              allMiddlewares.forEach((element) async {
-                handler = element(handler);
-              });
-
-              var response = handler(req);
-              await writeResponse(request, response);
-            } catch (err, stacktrace) {
-              await writeErrorResponse(request, err, stacktrace);
-            }
+            await processHandlersWithMiddleware(
+                bindings[i].process,
+                [
+                  ...bindings[i].middleware.reversed,
+                  ...middleware.reversed,
+                ],
+                req,
+                request);
             break;
           }
         }
       }
 
       if (!hasMatch) {
-        // TODO: We can clean this up a bit
-        var allMiddlewares = [...middleware.reversed];
-        var handler = (Request req) => Future.value(Response.NotFound());
-        allMiddlewares.forEach((element) {
-          handler = element(handler);
-        });
-
-        var response = handler(Request(request: request));
-        await writeResponse(request, response);
+        await processHandlersWithMiddleware(
+            (Request req) => Future.value(Response.NotFound()),
+            [...middleware.reversed],
+            Request(request: request),
+            request);
       }
 
       await request.response.close();
+    }
+  }
+
+  Future<void> processHandlersWithMiddleware(
+      Future<Response> Function(Request request) initialHandler,
+      List<Function> allMiddlewares,
+      Request req,
+      HttpRequest request) async {
+    try {
+      var handler = initialHandler;
+      allMiddlewares.forEach((element) async {
+        handler = element(handler);
+      });
+
+      var response = handler(req);
+      await writeResponse(request, response);
+    } catch (err, stacktrace) {
+      await writeErrorResponse(request, err, stacktrace);
     }
   }
 
