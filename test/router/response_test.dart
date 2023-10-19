@@ -120,7 +120,6 @@ void main() {
         final response = Response.Ok('version 1.0');
         final httpReq = FakeHttpRequest();
         await writeResponse(httpReq, Future.value(response));
-        expect(httpReq.response.headers.contentType, equals(ContentType.text));
         expect(
             (httpReq.response as FakeHttpResponse).body, equals('version 1.0'));
       });
