@@ -25,8 +25,7 @@ dart pub global activate steward
 The best examples for how to use Steward are captured in the test folder. Eventually, we'll refactor this out into tests and examples separately, but for now, they live together :)
 
 Using the Steward framework gives you the following (but not limited to) benefits:
-- A modular system with light Dependency Injection, Routing, Controllers, and more.
-- Automatic dependency injection into controllers when mounting into routers.
+- A modular system with light Dependency Injection, Routing, and more.
 - Easy HTTP request/response management.
 - Config parsing into the DI container at application boot.
 - Templating via the Mustache template specification.
@@ -36,21 +35,6 @@ Here's an example of how you can use Steward!
 ```dart
 import 'package:steward/steward.dart';
 
-// You can pull me out to a separate file, too ya know ;)
-class SampleController extends Controller {
-  @Injectable('UserService')
-  late UserService userService;
-  
-  @Get('/version')
-  version(_) => 'v1.0';
-
-  @Get('/show')
-  Response show(Request request) => view('main_template');
-  
-  @Get('/users')
-  Response users => UserService.getUsers();
-}
-
 Future main() async {
   var router = Router();
   var container = CacheContainer();
@@ -59,10 +43,7 @@ Future main() async {
   container.bind('UserService', (_) => UserService());
   
   // Replace the default DI container implementation
-  router.setContainer(container)
-  
-  // Mount the controller, parsing the annotations to build paths and injecting injectables
-  router.mount(SimpleController);
+  router.setContainer(container);
   
   // Bare route handler example
   router.get('/hello', (_) {
