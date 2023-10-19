@@ -51,7 +51,7 @@ void main() {
 
     final client = HttpClient();
     final request =
-        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/cont/');
+        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/');
     await request.close();
     expect(middlewareLogger[0], equals(1));
     expect(middlewareLogger[1], equals(2));
