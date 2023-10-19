@@ -1,8 +1,4 @@
 import 'dart:io';
-import 'dart:mirrors';
-
-import 'package:steward/controllers/controller.dart';
-import 'package:steward/controllers/route_utils.dart';
 import 'package:path_to_regexp/path_to_regexp.dart';
 import 'package:steward/router/static_binding.dart';
 import 'package:steward/steward.dart';
@@ -59,18 +55,6 @@ class Router {
 
   void setDIContainer(Container container) {
     this.container = container;
-  }
-
-  void mount(Type controllerType) {
-    final controllerDeclaration = reflectClass(controllerType);
-    final paths = getPaths(controllerDeclaration);
-    paths.forEach((element) {
-      bindings.add(_FunctionBinding(
-          verb: element.verb,
-          path: element.path,
-          callback: controllerItemRouteHandler(controllerType, element.method),
-          middleware: element.middleware));
-    });
   }
 
   void connect(String path, RequestCallback handler,

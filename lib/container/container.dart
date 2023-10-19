@@ -1,3 +1,10 @@
+/// ViewNotFoundError is thrown when we try to load a view that doesn't exist.
+class ViewNotFoundError extends Error {
+  String fileName;
+
+  ViewNotFoundError(this.fileName);
+}
+
 abstract class Container {
   void bind<T>(String key, T Function(Container) fn);
   T? make<T>(String key);
@@ -27,6 +34,19 @@ class CacheContainer implements Container {
       return bindings[key](this);
     }
     return null;
+  }
+
+  /// Load a file from the container
+  /// TODO: This doesnt feel like the right path forward for this.
+  String? view(String filename) {
+    String templateString;
+    try {
+      templateString = make('@views.$filename');
+    } catch (e) {
+      throw ViewNotFoundError(filename);
+    }
+
+    return templateString;
   }
 
   @override

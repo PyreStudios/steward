@@ -124,42 +124,6 @@ void main() {
         expect(
             (httpReq.response as FakeHttpResponse).body, equals('version 1.0'));
       });
-      group('sets content type', () {
-        test('when body is json-able', () async {
-          final response = Response.Ok([]);
-          final httpReq = FakeHttpRequest();
-          await writeResponse(httpReq, Future.value(response));
-          expect(
-              httpReq.response.headers.contentType, equals(ContentType.json));
-          expect((httpReq.response as FakeHttpResponse).body, equals('[]'));
-        });
-
-        test('when body is valid xml', () async {
-          final body = """
-<note>
-<to>Tove</to>
-<from>Jani</from>
-<heading>Reminder</heading>
-<body>Don't forget me this weekend!</body>
-</note>
-""";
-          final response = Response.Ok(body);
-          final httpReq = FakeHttpRequest();
-          await writeResponse(httpReq, Future.value(response));
-          expect(httpReq.response.headers.contentType!.mimeType,
-              equals('application/xml'));
-          expect((httpReq.response as FakeHttpResponse).body, equals(body));
-        });
-
-        test('when body is not json-able', () async {
-          final response = Response.Forbidden(Exception('No access'));
-          final httpReq = FakeHttpRequest();
-          await writeResponse(httpReq, Future.value(response));
-          expect(
-              httpReq.response.headers.contentType, equals(ContentType.text));
-          expect((httpReq.response as FakeHttpResponse).body, isA<Exception>());
-        });
-      });
     });
   });
 

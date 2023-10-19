@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:steward/controllers/route_utils.dart';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
@@ -31,14 +30,6 @@ Future<Response> Function(Request) ThirdMiddleware(
   };
 }
 
-@Path('/cont')
-class Cont extends Controller {
-  static const body = 'test middleware should be called';
-
-  @Get('/', [FirstMiddleware, SecondMiddleware, ThirdMiddleware])
-  String get(_) => body;
-}
-
 void main() {
   late Router router;
 
@@ -54,7 +45,9 @@ void main() {
   });
 
   test('Route Specific Middlewares execute from left to right order', () async {
-    router.mount(Cont);
+    router.get('/', (Request request) async {
+      return Response.Ok();
+    }, middleware: [FirstMiddleware, SecondMiddleware, ThirdMiddleware]);
 
     final client = HttpClient();
     final request =
