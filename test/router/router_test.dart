@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:steward/controllers/route_utils.dart';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
@@ -9,19 +8,11 @@ class UserService {
   String gimme() => 'got it';
 }
 
-class ComplexResponseBody {
+class ComplexResponseBody implements Jsonable {
   String content = 'Hello';
 
+  @override
   Map<String, dynamic> toJson() => {'content': content};
-}
-
-@Path('/cont')
-class Cont extends Controller {
-  @Get('/')
-  String get(_) => userService?.gimme() ?? 'no user service in container';
-
-  @Injectable('UserService')
-  late UserService? userService;
 }
 
 void main() {
@@ -49,29 +40,6 @@ void main() {
     expect(await response.transform(utf8.decoder).first, equals('Success'));
   });
 
-  test('Router responds appropriately to simple GET requests w/ Controller',
-      () async {
-    router.mount(Cont);
-
-    final client = HttpClient();
-    final request =
-        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/cont/');
-    final response = await request.close();
-    expect(await response.transform(utf8.decoder).first,
-        equals('no user service in container'));
-  });
-
-  test('Router injects container items into mounted Controller', () async {
-    router.container.bind('UserService', (_) => UserService());
-    router.mount(Cont);
-
-    final client = HttpClient();
-    final request =
-        await client.get(InternetAddress.loopbackIPv4.host, 4040, '/cont/');
-    final response = await request.close();
-    expect(await response.transform(utf8.decoder).first, equals('got it'));
-  });
-
   test('Router responds appropriately to simple POST requests', () async {
     router.post('/', (_) async {
       return Response.Ok('Success');
@@ -87,7 +55,7 @@ void main() {
   test('Router responds appropriately to get requests with object bodies',
       () async {
     router.post('/', (_) async {
-      return Response.Ok(ComplexResponseBody());
+      return Response.Json(ComplexResponseBody());
     });
 
     final client = HttpClient();

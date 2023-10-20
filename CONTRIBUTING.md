@@ -12,7 +12,7 @@ By participating, you are expected to uphold this code. Please report unacceptab
 Steward ships as two major modules, the binary module (bin) and the library module (lib).
 The binary gets built as an executable and is used to provide a CLI for working with (and generating) Steward projects.
 
-The library module contains all of the code that is used during runtime for applications built ontop of Steward (controllers, router, etc).
+The library module contains all of the code that is used during runtime for applications built ontop of Steward (router, container, etc).
 
 # How can I contribute?
 
