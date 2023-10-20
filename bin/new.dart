@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bosun/bosun.dart';
-import './new_controller.dart';
 import 'new_middleware.dart';
 import 'new_view.dart';
 
@@ -80,11 +79,9 @@ var viewTemplate = '''<!DOCTYPE html>
 
 var appTemplate = '''
 import 'package:steward/steward.dart';
-import 'package:{{{name}}}/controllers/sample_controller.dart';
 
 Future main() async {
   var router = Router();
-  router.mount(SimpleController);
   router.get('/hello', (Request request) async {
     return Response.Ok('Hello World!');
   });
@@ -107,28 +104,13 @@ Future main() async {
 }
 ''';
 
-var controllerTemplate = '''import 'package:steward/steward.dart';
-import 'package:steward/controllers/route_utils.dart';
-
-class SimpleController extends Controller {
-  @Get('/home')
-  Response home(Request request) {
-    return view('main');
-  }
-}
-''';
-
 class NewCommand extends Command {
   NewCommand()
       : super(
             command: 'new',
             description: 'Create a new steward app',
             example: 'steward new <app-name>',
-            subcommands: [
-              NewControllerCommand(),
-              NewMiddlewareCommand(),
-              NewViewCommand()
-            ]);
+            subcommands: [NewMiddlewareCommand(), NewViewCommand()]);
 
   @override
   void run(List<String> args, Map<String, dynamic> flags) {
@@ -139,7 +121,6 @@ class NewCommand extends Command {
     var config = File('./$name/config.yml');
     config.writeAsStringSync(configTemplate);
     Directory('./$name/views').createSync();
-    Directory('./$name/lib/controllers').createSync();
     Directory('./$name/assets').createSync();
 
     // remove generated files from dart tool
@@ -149,8 +130,6 @@ class NewCommand extends Command {
     // write initial files
     File('$name/lib/main.dart')
         .writeAsStringSync(appTemplate.replaceAll('{{{name}}}', name));
-    File('$name/lib/controllers/sample_controller.dart')
-        .writeAsStringSync(controllerTemplate);
     File('$name/views/main.mustache').writeAsStringSync(viewTemplate);
     Directory.current = Directory('./$name');
 
