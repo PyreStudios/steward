@@ -43,8 +43,6 @@ class _SignUpForm extends Form {
 Of course, your sign up form may have different business logic associated with it and perhaps better validation, but the general shape of your form will match the one above. You'll take in some parameters to the form constructor and then call super, passing in a function to validate the form. That function will create a list of errors and return those errors. If no errors are returned, the form is assumed to be valid. 
 
 
-Using the form in the above example, we can set up a POST binding on our controller that uses our Sign Up form:
-
 ```dart
 @Post('/')
   Future<Response> signUp(Request request) async {

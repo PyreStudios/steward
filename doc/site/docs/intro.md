@@ -13,7 +13,6 @@ Steward is comprised of five main parts.
 - The CLI
 - The Router
 - The Container
-- Controllers
 - The App
 
 You'll learn more about each of these in their own respective documentation.
@@ -24,8 +23,7 @@ The best examples for how to use Steward are captured in the test folder. Eventu
 
 Using the Steward framework gives you the following (but not limited to) benefits:
 
-- A modular system with light Dependency Injection, Routing, Controllers, and more.
-- Automatic dependency injection into controllers when mounting into routers.
+- A modular system with light Dependency Injection, Routing, and more.
 - Easy HTTP request/response management.
 - Config parsing into the DI container at application boot.
 - Templating via the Mustache template specification.
