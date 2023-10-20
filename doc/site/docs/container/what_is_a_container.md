@@ -9,8 +9,6 @@ A container, in the Steward sense, is simply a box that things can be stored in 
 # DI in a Nutshell
 Simply put, DI (Dependency Injection) is a technique in which an object recieves other objects that it depends on. There are typically three main names used to identify DI components. A "Client" is the object that dependencies are being provided to, an injected object is often (but not always) called a "Service", and finally the code that passes the Service into the Client is called an "Injector."
 
-In Steward, the Client is typically a Controller, the Injector is controlled by the framework, and the "Service" is whatever you want to define and inject (connection pools are a common example).
-
 The intent behind DI is to provide a separation of concerns when it comes to constructing objects.
 
 # Binding a "Service" to the DI Container
