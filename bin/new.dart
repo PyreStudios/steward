@@ -82,17 +82,17 @@ import 'package:steward/steward.dart';
 
 Future main() async {
   var router = Router();
-  router.get('/hello', (Request request) async {
+  router.get('/hello', (Context context) async {
     return Response.Ok('Hello World!');
   });
 
-  router.get('/config', (Request request) async {
-    print(request.container.make('@config.app.name'));
-    return Response.Ok(request.container.make('@config.app.name'));
+  router.get('/config', (Context context) async {
+    print(context.read('@config.app.name'));
+    return Response.Ok(context.read('@config.app.name'));
   });
 
-  router.get('/:name', (Request request) async {
-    return Response.Ok(request.pathParams['name']);
+  router.get('/:name', (Context context) async {
+    return Response.Ok(context.request.pathParams['name']);
   });
 
 

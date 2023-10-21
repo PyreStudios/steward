@@ -5,13 +5,13 @@ import 'package:recase/recase.dart';
 
 var middlwareTemplate = '''import 'package:steward/steward.dart';
 
-Future<Response> Function(Request) {{{name}}}Middleware(
-    Future<Response> Function(Request) next) {
-  return (Request request) {
+Future<Response> Function(Context) {{{name}}}Middleware(
+    Future<Response> Function(Context) next) {
+  return (Context context) {
 
     // Do something here!
     
-    return next(request);
+    return next(context);
   };
 }
 ''';
