@@ -2,24 +2,23 @@ import 'package:steward/app/app.dart';
 import 'package:steward/router/router.dart';
 
 Future main() async {
-  var router = Router();
+  final router = Router();
 
   router.staticFiles('/assets');
-  router.get('/hello', (Request request) async {
+  router.get('/hello', (Context context) async {
     return Response.Ok('Hello World!');
   });
 
-  router.get('/config', (Request request) async {
-    print(request.container);
-    print(request.container.make('@config'));
-    return Response.Ok(request.container.make('@config'));
+  router.get('/config', (Context context) async {
+    print(context.read('@config'));
+    return Response.Ok(context.read('@config'));
   });
 
-  router.get('/:name', (Request request) async {
-    return Response.Ok(request.pathParams['name']);
+  router.get('/:name', (Context context) async {
+    return Response.Ok(context.request.pathParams['name']);
   });
 
-  var app = App(router: router);
+  final app = App(router: router);
 
   return app.start();
 }

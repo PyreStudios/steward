@@ -15,7 +15,7 @@ import 'package:steward/router/response.dart';
 import 'package:steward/router/request.dart';
 
 Future main() async {
-  var router = Router();
+  final router = Router();
   router.get('/hello', (Request request) {
     return Response.Ok("Hello World!");
   });

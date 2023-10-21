@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bosun/bosun.dart';
 import 'package:recase/recase.dart';
 
-var viewTemplate = '''<!DOCTYPE html>
+const viewTemplate = '''<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -75,7 +75,7 @@ class NewViewCommand extends Command {
 
   @override
   void run(List<String> args, Map<String, dynamic> flags) {
-    var name = args[0];
+    final name = args[0];
     // write initial files
     final views = Directory('./lib/views');
     if (!views.existsSync()) {

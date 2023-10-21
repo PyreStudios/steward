@@ -15,7 +15,7 @@ The intent behind DI is to provide a separation of concerns when it comes to con
 Let's start by binding a "Service" to the DI container.
 
 ```dart
-var container = CacheContainer();
+final container = Container();
 container.bind<String>('sample', (Container container) {
   return 'ABC123';
 });
@@ -28,7 +28,7 @@ This simple snippet shows how we can new up an implementer of Container (CacheCo
 Let's bind the same value from above:
 
 ```dart
-var container = CacheContainer();
+final container = StewardContainer();
 container.bind<String>('sample', (Container container) {
   return 'ABC123';
 });
@@ -37,7 +37,7 @@ container.bind<String>('sample', (Container container) {
 Now we'll likely want to retrieve this String from our container at some point. Doing so is fairly simple!
 
 ```dart
-var key = container.make<String>('sample');
+final key = container.make<String>('sample');
 // key is now 'ABC123'
 ```
 
@@ -53,7 +53,7 @@ class UserService {
 }
 
 
-var container = CacheContainer();
+final container = StewardContainer();
 container.bind<UserService>(UserService.Key, (Container container) {
   return UserService('1');
 });

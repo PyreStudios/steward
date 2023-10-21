@@ -27,7 +27,7 @@ The 2nd parameter to each of the Router methods is the handler. The Handler is a
 import 'package:steward/steward.dart';
 
 Future main() async {
-  var router = Router();
+  final router = Router();
   router.get('/hello', (Request request) async {
     return Response.Ok("Hello World!");
   });

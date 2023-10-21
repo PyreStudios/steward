@@ -36,8 +36,8 @@ Here's an example of how you can use Steward!
 import 'package:steward/steward.dart';
 
 Future main() async {
-  var router = Router();
-  var container = CacheContainer();
+  final router = Router();
+  final container = Container();
   
   // Setup a DI binding for UserService
   container.bind('UserService', (_) => UserService());
@@ -51,14 +51,14 @@ Future main() async {
   });
   
   // Plucking things out of the container example
-  router.get('/config', (Request request) {
-    print(request.container.make('@config.app.name'));
-    return Response.Ok(request.container.make('@config.app.name'));
+  router.get('/config', (Context context) {
+    print(context.make('@config.app.name'));
+    return Response.Ok(context.make('@config.app.name'));
   });
   
   // Path Params example
-  router.get('/:name', (Request request) {
-    return Response.Ok(request.pathParams['name']);
+  router.get('/:name', (Context context) {
+    return Response.Ok(context.request.pathParams['name']);
   });
   
   var app = App(router: router);

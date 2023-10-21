@@ -5,31 +5,37 @@ class ViewNotFoundError extends Error {
   ViewNotFoundError(this.fileName);
 }
 
-abstract class Container {
-  void bind<T>(String key, T Function(Container) fn);
-  T? make<T>(String key);
-
-  /// Clones a container so that a new container can have values bound to it
-  /// without updating this current container.
-  Container clone();
+abstract interface class Cloneable<T> {
+  T clone();
 }
+
+abstract interface class ContainerReable {
+  T? read<T>(String key);
+}
+
+abstract interface class ContainerWriteable {
+  void bind<T>(String key, T Function(Container) fn);
+}
+
+abstract interface class Container
+    implements ContainerReable, ContainerWriteable {}
 
 /// A rudimentary DI container implementation
 /// container bindings are created as needed.
-class CacheContainer implements Container {
+class StewardContainer implements Container, Cloneable<StewardContainer> {
   Map<String, dynamic> bindings = {};
 
   /// Binds a new DI item into the container
   /// The function bound to the provided key will only be called when the container
   /// receives a request for the item at that key.
   @override
-  void bind<T>(String key, T Function(Container) fn) {
+  void bind<T>(String key, T Function(Container container) fn) {
     bindings[key] = fn;
   }
 
   /// Generate an item for a given key
   @override
-  T? make<T>(String key) {
+  T? read<T>(String key) {
     if (bindings.containsKey(key)) {
       return bindings[key](this);
     }
@@ -41,7 +47,7 @@ class CacheContainer implements Container {
   String? view(String filename) {
     String templateString;
     try {
-      templateString = make('@views.$filename');
+      templateString = read('@views.$filename');
     } catch (e) {
       throw ViewNotFoundError(filename);
     }
@@ -50,8 +56,8 @@ class CacheContainer implements Container {
   }
 
   @override
-  Container clone() {
-    return CacheContainer()..bindings.addAll(bindings);
+  StewardContainer clone() {
+    return StewardContainer()..bindings.addAll(bindings);
   }
 }
 

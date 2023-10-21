@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 
 class MockRouter extends Fake implements Router {
   @override
-  final Container container;
+  final StewardContainer container;
 
   MockRouter({required this.container});
 
@@ -17,7 +17,7 @@ class MockRouter extends Fake implements Router {
 void main() {
   group('App', () {
     test('throws exception if cant find config.yml', () async {
-      final container = CacheContainer();
+      final container = StewardContainer();
       final mockRouter = MockRouter(container: container);
       final app = App(router: mockRouter);
 
@@ -25,14 +25,14 @@ void main() {
     });
 
     test('binds the environment into the application', () async {
-      final container = CacheContainer();
+      final container = StewardContainer();
       final mockRouter = MockRouter(container: container);
       try {
         // this blows up because the config file is missing
         final app = App(router: mockRouter);
         await app.start();
       } catch (_) {}
-      expect(container.make<Environment>('@environment'), Environment.other);
+      expect(container.read<Environment>('@environment'), Environment.other);
     });
   });
 }

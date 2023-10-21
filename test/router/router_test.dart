@@ -20,7 +20,7 @@ void main() {
 
   setUp(() {
     router = Router();
-    router.setDIContainer(CacheContainer());
+    router.setDIContainer(StewardContainer());
     router.serveHTTP();
   });
 
@@ -134,10 +134,10 @@ void main() {
     router.get('/', (_) async {
       return Response.Ok('Success');
     }, middleware: [
-      (Future<Response> Function(Request) next) {
+      (Future<Response> Function(Context) next) {
         called = true;
-        return (Request request) {
-          return next(request);
+        return (Context context) {
+          return next(context);
         };
       }
     ]);
@@ -154,10 +154,10 @@ void main() {
       () async {
     var called = false;
     router.middleware = [
-      (Future<Response> Function(Request) next) {
+      (Future<Response> Function(Context) next) {
         called = true;
-        return (Request request) {
-          return next(request);
+        return (Context context) {
+          return next(context);
         };
       }
     ];

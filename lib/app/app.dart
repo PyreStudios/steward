@@ -12,7 +12,7 @@ enum Environment { production, other }
 class App {
   Router router;
   Environment environment;
-  late Container _container;
+  late StewardContainer _container;
 
   App({required this.router, this.environment = Environment.other}) {
     _container = router.container;
@@ -40,10 +40,10 @@ class App {
   /// and ultimately preprends "@config." to the key before adding that
   /// config item to the DI container.
   void _loadConfigIntoContainer() {
-    var configFile = File('config.yml');
-    var configReader = ConfigReader(file: configFile)..read();
-    var config = configReader.parsed;
-    var flat = flatten(config);
+    final configFile = File('config.yml');
+    final configReader = ConfigReader(file: configFile)..read();
+    final config = configReader.parsed;
+    final flat = flatten(config);
     flat.entries.forEach((element) {
       _container.bind('@config.' + element.key, (_) => element.value);
     });
@@ -51,14 +51,14 @@ class App {
 
   void _loadViewsIntoContainer() {
     try {
-      var files = Directory('./views')
+      final files = Directory('./views')
           .listSync(recursive: true, followLinks: true)
           .whereType<File>()
           .where((file) => file.path.endsWith('.mustache'))
           .map((file) =>
               {'path': file.path, 'contents': file.readAsStringSync()});
       files.forEach((file) {
-        var key = file['path']
+        final key = file['path']
             ?.replaceAll('/', '.')
             .replaceFirst('..views.', '')
             .replaceFirst('.mustache', '');
