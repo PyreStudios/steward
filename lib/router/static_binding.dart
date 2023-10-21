@@ -10,8 +10,8 @@ class StaticBinding extends RouteBinding {
   static final textExtensions = ['css', 'csv', 'html', 'xml'];
 
   @override
-  Future<Response> process(Request request) async {
-    var assetPath = '$path${request.request.uri.path.split(path).last}';
+  Future<Response> process(Context context) async {
+    var assetPath = '$path${context.request.uri.path.split(path).last}';
     var assetType = 'text/html';
 
     try {

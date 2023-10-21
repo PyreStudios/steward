@@ -6,7 +6,7 @@ import 'package:steward/router/response.dart';
 Future<Response> Function(Request) RequestLogger(
     Future<Response> Function(Request) next) {
   return (Request request) {
-    print('Incoming Request: ${request.request.uri}');
+    print('Incoming Request: ${request.uri}');
     return next(request);
   };
 }

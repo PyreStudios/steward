@@ -19,7 +19,7 @@ While this may look complex, the actual implementation of a custom middleware is
 Future<Response> Function(Request) RequestLogger(
     Future<Response> Function(Request) next) {
   return (Request request) {
-    print('Incoming Request: ${request.request.uri}');
+    print('Incoming Request: ${request.uri}');
     return next(request);
   };
 }

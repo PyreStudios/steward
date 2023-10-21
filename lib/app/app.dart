@@ -12,7 +12,7 @@ enum Environment { production, other }
 class App {
   Router router;
   Environment environment;
-  late Container _container;
+  late StewardContainer _container;
 
   App({required this.router, this.environment = Environment.other}) {
     _container = router.container;

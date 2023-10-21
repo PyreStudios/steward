@@ -6,27 +6,27 @@ import 'package:test/test.dart';
 var middlewareLogger = <int>[];
 
 /// An extremely simple Middleware function that prints the incoming request URI
-Future<Response> Function(Request) FirstMiddleware(
-    Future<Response> Function(Request) next) {
-  return (Request request) {
+Future<Response> Function(Context) FirstMiddleware(
+    Future<Response> Function(Context) next) {
+  return (Context context) {
     middlewareLogger.add(1);
-    return next(request);
+    return next(context);
   };
 }
 
-Future<Response> Function(Request) SecondMiddleware(
-    Future<Response> Function(Request) next) {
-  return (Request request) {
+Future<Response> Function(Context) SecondMiddleware(
+    Future<Response> Function(Context) next) {
+  return (Context context) {
     middlewareLogger.add(2);
-    return next(request);
+    return next(context);
   };
 }
 
-Future<Response> Function(Request) ThirdMiddleware(
-    Future<Response> Function(Request) next) {
-  return (Request request) {
+Future<Response> Function(Context) ThirdMiddleware(
+    Future<Response> Function(Context) next) {
+  return (Context context) {
     middlewareLogger.add(3);
-    return next(request);
+    return next(context);
   };
 }
 
@@ -35,7 +35,7 @@ void main() {
 
   setUp(() {
     router = Router();
-    router.setDIContainer(CacheContainer());
+    router.setDIContainer(StewardContainer());
     router.serveHTTP();
     middlewareLogger.clear();
   });
@@ -45,7 +45,7 @@ void main() {
   });
 
   test('Route Specific Middlewares execute from left to right order', () async {
-    router.get('/', (Request request) async {
+    router.get('/', (Context context) async {
       return Response.Ok();
     }, middleware: [FirstMiddleware, SecondMiddleware, ThirdMiddleware]);
 

@@ -5,13 +5,14 @@ import 'package:steward/steward.dart';
 
 export 'package:steward/router/response.dart';
 export 'package:steward/router/request.dart';
+export 'package:steward/router/context.dart';
 
 enum HttpVerb { Connect, Delete, Get, Head, Options, Patch, Post, Put, Trace }
 
-typedef RequestCallback = Future<Response> Function(Request request);
+typedef RequestCallback = Future<Response> Function(Context context);
 
 abstract class Processable {
-  Future<Response> process(Request request);
+  Future<Response> process(Context context);
 }
 
 abstract class RouteBinding implements Processable {
@@ -36,8 +37,8 @@ class _FunctionBinding extends RouteBinding {
       : super(verb: verb, path: path, middleware: middleware);
 
   @override
-  Future<Response> process(Request request) {
-    return callback(request);
+  Future<Response> process(Context context) {
+    return callback(context);
   }
 
   @override
@@ -45,7 +46,7 @@ class _FunctionBinding extends RouteBinding {
 }
 
 class Router {
-  Container container = CacheContainer();
+  StewardContainer container = StewardContainer();
   List<RouteBinding> bindings = [];
   List<MiddlewareFunc> middleware = [];
   HttpServer? server;
@@ -53,7 +54,7 @@ class Router {
 
   Router({this.address});
 
-  void setDIContainer(Container container) {
+  void setDIContainer(StewardContainer container) {
     this.container = container;
   }
 
@@ -112,7 +113,7 @@ class Router {
   }
 
   Future serveHTTP() async {
-    var port = container.make('@config.app.port') ?? 4040;
+    var port = container.read('@config.app.port') ?? 4040;
     server = await HttpServer.bind(
       InternetAddress.anyIPv6,
       port,
@@ -150,8 +151,10 @@ class Router {
           var match = regex.matchAsPrefix(request.uri.path);
           if (match != null) {
             var pathParams = extract(params, match);
-            var req = Request(request: request, pathParams: pathParams)
-              ..setContainer(container.clone());
+
+            final ctx = StewardContext(
+                request: Request(request: request, pathParams: pathParams),
+                container: container.clone());
 
             await processHandlersWithMiddleware(
                 bindings[i].process,
@@ -159,7 +162,7 @@ class Router {
                   ...bindings[i].middleware.reversed,
                   ...middleware.reversed,
                 ],
-                req,
+                ctx,
                 request);
             break;
           }
@@ -168,9 +171,11 @@ class Router {
 
       if (!hasMatch) {
         await processHandlersWithMiddleware(
-            (Request req) => Future.value(Response.NotFound()),
+            (Context context) => Future.value(Response.NotFound()),
             [...middleware.reversed],
-            Request(request: request),
+            StewardContext(
+                request: Request(request: request),
+                container: container.clone()),
             request);
       }
 
@@ -179,9 +184,9 @@ class Router {
   }
 
   Future<void> processHandlersWithMiddleware(
-      Future<Response> Function(Request request) initialHandler,
+      Future<Response> Function(Context context) initialHandler,
       List<Function> allMiddlewares,
-      Request req,
+      Context context,
       HttpRequest request) async {
     try {
       var handler = initialHandler;
@@ -189,7 +194,7 @@ class Router {
         handler = element(handler);
       });
 
-      var response = handler(req);
+      var response = handler(context);
       await writeResponse(request, response);
     } catch (err, stacktrace) {
       await writeErrorResponse(request, err, stacktrace);
@@ -197,7 +202,7 @@ class Router {
   }
 
   Future<void> writeErrorResponse(request, err, stacktrace) async {
-    if (container.make('@environment') == Environment.production) {
+    if (container.read('@environment') == Environment.production) {
       // if things are production, we need to treat this all differently.
       return await writeResponse(request, Future.value(Response.Boom()));
     } else {
