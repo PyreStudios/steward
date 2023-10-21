@@ -2,7 +2,7 @@ import 'package:steward/app/app.dart';
 import 'package:steward/router/router.dart';
 
 Future main() async {
-  var router = Router();
+  final router = Router();
 
   router.staticFiles('/assets');
   router.get('/hello', (Context context) async {
@@ -18,7 +18,7 @@ Future main() async {
     return Response.Ok(context.request.pathParams['name']);
   });
 
-  var app = App(router: router);
+  final app = App(router: router);
 
   return app.start();
 }

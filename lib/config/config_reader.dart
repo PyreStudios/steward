@@ -12,7 +12,7 @@ class ConfigReader {
 
   /// Reads the config file and parses it into a Map.
   void read() {
-    var data = file.readAsStringSync();
+    final data = file.readAsStringSync();
     YamlMap yamlMap = loadYaml(data);
     // hacky way to go from yaml map to normal map
     parsed = jsonDecode(jsonEncode(yamlMap));

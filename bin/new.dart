@@ -4,13 +4,13 @@ import 'package:bosun/bosun.dart';
 import 'new_middleware.dart';
 import 'new_view.dart';
 
-var configTemplate = '''---
+const configTemplate = '''---
 app:
   name: My Steward App
   port: 4040
 ''';
 
-var viewTemplate = '''<!DOCTYPE html>
+const viewTemplate = '''<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -77,11 +77,11 @@ var viewTemplate = '''<!DOCTYPE html>
 </html>
 ''';
 
-var appTemplate = '''
+const appTemplate = '''
 import 'package:steward/steward.dart';
 
 Future main() async {
-  var router = Router();
+  final router = Router();
   router.get('/hello', (Context context) async {
     return Response.Ok('Hello World!');
   });
@@ -97,7 +97,7 @@ Future main() async {
 
 
   // Add your own DI objects to the container here
-  var app = App(router: router);
+  final app = App(router: router);
 
   return app.start();
 
@@ -114,11 +114,11 @@ class NewCommand extends Command {
 
   @override
   void run(List<String> args, Map<String, dynamic> flags) {
-    var name = args[0];
+    final name = args[0];
 
     Process.runSync('dart', ['create', name, '--template', 'console-full']);
 
-    var config = File('./$name/config.yml');
+    final config = File('./$name/config.yml');
     config.writeAsStringSync(configTemplate);
     Directory('./$name/views').createSync();
     Directory('./$name/assets').createSync();

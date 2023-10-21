@@ -113,7 +113,7 @@ class Router {
   }
 
   Future serveHTTP() async {
-    var port = container.read('@config.app.port') ?? 4040;
+    final port = container.read('@config.app.port') ?? 4040;
     server = await HttpServer.bind(
       InternetAddress.anyIPv6,
       port,
@@ -124,10 +124,10 @@ class Router {
     await for (HttpRequest request in server!) {
       var hasMatch = false;
       for (var i = 0; i < bindings.length; i++) {
-        var params = <String>[];
+        final params = <String>[];
 
 // Get the root pattern from the pathToRegex call
-        var rootPattern = pathToRegExp(bindings[i].path,
+        final rootPattern = pathToRegExp(bindings[i].path,
                 parameters: params, prefix: bindings[i].isPrefixBinding)
             .pattern;
 
@@ -142,15 +142,15 @@ class Router {
           cleanedPattern =
               cleanedPattern.substring(0, cleanedPattern.length - 1);
         }
-        var regex = RegExp(
+        final regex = RegExp(
             '$cleanedPattern\\/?${bindings[i].isPrefixBinding ? '\$)' : '\$'}',
             caseSensitive: false);
         hasMatch = regex.hasMatch(request.uri.path);
 
         if (hasMatch) {
-          var match = regex.matchAsPrefix(request.uri.path);
+          final match = regex.matchAsPrefix(request.uri.path);
           if (match != null) {
-            var pathParams = extract(params, match);
+            final pathParams = extract(params, match);
 
             final ctx = StewardContext(
                 request: Request(request: request, pathParams: pathParams),
@@ -194,7 +194,7 @@ class Router {
         handler = element(handler);
       });
 
-      var response = handler(context);
+      final response = handler(context);
       await writeResponse(request, response);
     } catch (err, stacktrace) {
       await writeErrorResponse(request, err, stacktrace);

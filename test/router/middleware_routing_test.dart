@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:steward/steward.dart';
 import 'package:test/test.dart';
 
-var middlewareLogger = <int>[];
+final middlewareLogger = <int>[];
 
 /// An extremely simple Middleware function that prints the incoming request URI
 Future<Response> Function(Context) FirstMiddleware(

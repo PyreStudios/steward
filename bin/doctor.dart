@@ -12,12 +12,12 @@ class DoctorCommand extends Command {
 
   @override
   void run(List<String> args, Map<String, dynamic> flags) {
-    var configExists = File('./config.yml').existsSync();
-    var viewsExist = Directory('./views').existsSync();
-    var pubspec = File('./pubspec.yaml');
-    var pubspecExists = pubspec.existsSync();
-    var pubspecContents = pubspecExists ? pubspec.readAsLinesSync() : [];
-    var stewardVersion = pubspecContents.firstWhere(
+    final configExists = File('./config.yml').existsSync();
+    final viewsExist = Directory('./views').existsSync();
+    final pubspec = File('./pubspec.yaml');
+    final pubspecExists = pubspec.existsSync();
+    final pubspecContents = pubspecExists ? pubspec.readAsLinesSync() : [];
+    final stewardVersion = pubspecContents.firstWhere(
         (element) => element.contains('steward:'),
         orElse: () => 'NOT FOUND');
 

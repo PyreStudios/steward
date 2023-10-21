@@ -22,7 +22,7 @@ abstract class Form {
   /// Returns a list of form errors, or an empty list if there are no errors - in which case isValid will be true.
   /// Validation is handled lazily so you'll need to call this function to trigger validation.
   List<FormError> validate() {
-    var errors = validator();
+    final errors = validator();
 
     if (errors.isNotEmpty) {
       _isValid = false;

@@ -100,7 +100,7 @@ class Response {
   Response.View(String templateString,
       {this.statusCode = HttpStatus.ok,
       Map<String, dynamic> varMap = const {}}) {
-    var template = Template(templateString);
+    final template = Template(templateString);
     body = template.renderString(varMap);
   }
 
@@ -116,8 +116,8 @@ class Response {
 /// contents of the steward response to the HTTP response.
 /// TODO: this should only be called by Steward
 Future<void> writeResponse(HttpRequest request, Future<Response> resp) async {
-  var response = await resp;
-  var body = response.body;
+  final response = await resp;
+  final body = response.body;
 
   request.response.headers.contentType = response.headers.contentType;
   request.response.headers.date = response.headers.date;

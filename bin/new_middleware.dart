@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bosun/bosun.dart';
 import 'package:recase/recase.dart';
 
-var middlwareTemplate = '''import 'package:steward/steward.dart';
+const middlwareTemplate = '''import 'package:steward/steward.dart';
 
 Future<Response> Function(Context) {{{name}}}Middleware(
     Future<Response> Function(Context) next) {
@@ -25,7 +25,7 @@ class NewMiddlewareCommand extends Command {
 
   @override
   void run(List<String> args, Map<String, dynamic> flags) {
-    var name = args[0];
+    final name = args[0];
     // write initial files
     final middleware = Directory('./lib/middleware');
     if (!middleware.existsSync()) {

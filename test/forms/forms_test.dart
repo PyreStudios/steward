@@ -4,7 +4,7 @@ import 'package:steward/steward.dart';
 class BadForm extends Form {
   @override
   List<FormError> validator() {
-    var errors = <FormError>[];
+    final errors = <FormError>[];
 
     if (1 != 2) {
       errors.add(FormError('1 != 2'));
@@ -17,7 +17,7 @@ class BadForm extends Form {
 class GoodForm extends Form {
   @override
   List<FormError> validator() {
-    var errors = <FormError>[];
+    final errors = <FormError>[];
 
     if (1 != 1) {
       errors.add(FormError('this should never happen'));
@@ -39,7 +39,7 @@ class FormWithData extends Form {
 
   @override
   List<FormError> validator() {
-    var errors = <FormError>[];
+    final errors = <FormError>[];
 
     if (user.age < 18) {
       errors.add(FormError('user is under 18'));
@@ -52,20 +52,20 @@ class FormWithData extends Form {
 void main() {
   group('Form tests', () {
     test('should handle validation errors', () {
-      var form = BadForm();
+      final form = BadForm();
       expect(form.validate().isNotEmpty, true);
       expect(form.validate()[0].message, '1 != 2');
       expect(form.isValid, false);
     });
 
     test('should handle no validation errors', () {
-      var form = GoodForm();
+      final form = GoodForm();
       expect(form.validate().isEmpty, true);
       expect(form.isValid, true);
     });
 
     test('example with incoming data', () {
-      var form = FormWithData(User(age: 16, name: 'John'));
+      final form = FormWithData(User(age: 16, name: 'John'));
       expect(form.validate().isNotEmpty, true);
       expect(form.validate()[0].message, 'user is under 18');
       expect(form.isValid, false);
